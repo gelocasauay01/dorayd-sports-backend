@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 public class LeagueIntegrationTest {
 
+    // Refer to data-test.sql to know the values of each IDs
     private final int FIND_ID = 1;
     private final int UPDATE_ID = 2;
     private final int DELETE_ID = 3;
