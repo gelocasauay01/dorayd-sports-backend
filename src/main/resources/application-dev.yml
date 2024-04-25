@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dorayd
+    username: postgres
+    password: jeka08
+  sql:
+      init:
+          platform: dev

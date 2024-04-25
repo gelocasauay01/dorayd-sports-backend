@@ -1,0 +1,4 @@
+CREATE TABLE league (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL
+);
