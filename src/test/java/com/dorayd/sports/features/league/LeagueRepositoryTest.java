@@ -1,4 +1,4 @@
-package com.dorayd.sports.features.league_services;
+package com.dorayd.sports.features.league;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class LeagueRepositoryTests {
+public class LeagueRepositoryTest {
     
     @Autowired
     private LeagueRepository repository;
@@ -86,7 +86,7 @@ public class LeagueRepositoryTests {
     @Test
     public void givenDelete_whenLeagueExists_thenDelete() {
         // Arrange
-        Long id = SqlQueryExecutor.insert("INSERT INTO league(title) VALUES('Sitio Kapayapaan League')", jdbcTemplate);
+        Long id = SqlQueryExecutor.insert("INSERT INTO leagues(title) VALUES('Sitio Kapayapaan League')", jdbcTemplate);
 
         // Act 
         boolean isDeleted = repository.delete(id);

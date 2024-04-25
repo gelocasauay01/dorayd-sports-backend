@@ -4,5 +4,7 @@ spring:
     username: postgres
     password: jeka08
   sql:
-      init:
-          platform: dev
+    init:
+      platform: dev
+      mode: always
+      

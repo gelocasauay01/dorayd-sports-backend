@@ -1,4 +1,4 @@
-package com.dorayd.sports.features.league_services;
+package com.dorayd.sports.features.team;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class LeagueIntegrationTest {
+public class TeamIntegrationTest {
 
     private final int FIND_ID = 1;
     private final int UPDATE_ID = 2;
@@ -32,13 +32,13 @@ public class LeagueIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("GET /league/1 - Found")
-    public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
+    @DisplayName("GET /team/1 - Found")
+    public void givenFindById_whenTeamExists_thenReturnSpecificTeam() throws Exception {
         // Arrange
-        String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\"}";
+        String expectedJson = "{\"id\":1,\"name\":\"Team Rocket\"}";
 
         // Act 
-        MvcResult result = mockMvc.perform(get("/api/league/{id}", FIND_ID)).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/team/{id}", FIND_ID)).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -47,39 +47,39 @@ public class LeagueIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /league/1 - Not Found")
-    public void givenFindById_whenLeagueDoesNotExist_thenReturnNotFoundStatus() throws Exception {
+    @DisplayName("GET /team/1 - Not Found")
+    public void givenFindById_whenTeamDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         // Act 
-        MvcResult result = mockMvc.perform(get("/api/league/{id}", 100)).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/team/{id}", 100)).andReturn();
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
     }
 
     @Test
-    @DisplayName("POST /league - CREATED")
-    public void givenCreate_whenLeagueIsValid_thenReturnCreatedLeague() throws Exception {
+    @DisplayName("POST /team - CREATED")
+    public void givenCreate_whenTeamIsValid_thenReturnCreatedTeam() throws Exception {
         // Act
-        MvcResult result = mockMvc.perform(post("/api/league")
+        MvcResult result = mockMvc.perform(post("/api/team")
             .contentType(MediaType.APPLICATION_JSON)
-            .content( "{\"id\": null,\"title\":\"Greenpark Summer League\"}")).andReturn();
+            .content( "{\"id\": null,\"name\":\"Greenpark Summer Team\"}")).andReturn();
         
         // Assert
         assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
         assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
-        assertTrue(result.getResponse().getContentAsString().contains("Greenpark Summer League"));
+        assertTrue(result.getResponse().getContentAsString().contains("Greenpark Summer Team"));
     }
 
     @Test
-    @DisplayName("PUT /league/{id} - OK")
-    public void givenUpdate_whenLeagueAndIdExists_thenUpdateAndReturnUpdatedLeague() throws Exception {
+    @DisplayName("PUT /team/{id} - OK")
+    public void givenUpdate_whenTeamAndIdExists_thenUpdateAndReturnUpdatedTeam() throws Exception {
         // Arrange
-        String expectedJson = String.format("{\"id\":%d,\"title\":\"Karangalan League\"}", UPDATE_ID);
+        String expectedJson = String.format("{\"id\":%d,\"name\":\"Karangalan Team\"}", UPDATE_ID);
 
         //Act
-        MvcResult result = mockMvc.perform(put("/api/league/{id}", UPDATE_ID)
+        MvcResult result = mockMvc.perform(put("/api/team/{id}", UPDATE_ID)
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"id\": null,\"title\":\"Karangalan League\"}")).andReturn();
+            .content("{\"id\": null,\"name\":\"Karangalan Team\"}")).andReturn();
         
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -88,11 +88,11 @@ public class LeagueIntegrationTest {
     }
 
     @Test
-    @DisplayName("DELETE /league/{id} - OK")
-    public void givenDelete_whenLeagueWithIdExists_thenDeleteLeague() throws Exception {
+    @DisplayName("DELETE /team/{id} - OK")
+    public void givenDelete_whenTeamWithIdExists_thenDeleteTeam() throws Exception {
 
         // Act
-        MvcResult result = mockMvc.perform(delete("/api/league/{id}", DELETE_ID)).andReturn();
+        MvcResult result = mockMvc.perform(delete("/api/team/{id}", DELETE_ID)).andReturn();
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());

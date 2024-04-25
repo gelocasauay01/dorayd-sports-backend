@@ -14,9 +14,9 @@ import com.dorayd.sports.features.league.models.League;
 @Repository
 public class LeagueRepositoryImpl implements LeagueRepository{
 
-    private final String FIND_BY_ID_QUERY = "SELECT * FROM league WHERE id = ?";
-    private final String DELETE_BY_ID_QUERY = "DELETE FROM league WHERE id = ?";
-    private final String UPDATE_BY_ID_QUERY = "UPDATE league SET title = ? WHERE id = ?";
+    private final String FIND_BY_ID_QUERY = "SELECT * FROM leagues WHERE id = ?";
+    private final String DELETE_BY_ID_QUERY = "DELETE FROM leagues WHERE id = ?";
+    private final String UPDATE_BY_ID_QUERY = "UPDATE leagues SET title = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -24,7 +24,7 @@ public class LeagueRepositoryImpl implements LeagueRepository{
     public LeagueRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate)
-            .withTableName("league")
+            .withTableName("leagues")
             .usingGeneratedKeyColumns("id");
     }
 
