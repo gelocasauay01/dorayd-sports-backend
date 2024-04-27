@@ -4,12 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
+import com.dorayd.sports.features.user.models.User;
+
 @AllArgsConstructor
 @Getter
 @Setter
 public class Team {
     private Long id;
     private String name;
+    private List<User> players;
 
     @Override
     public String toString() {
@@ -17,6 +22,7 @@ public class Team {
             team:
                 id: %d
                 name: %s    
-        """, id, name);
+                players: %s
+        """, id, name, players);
     }
 }

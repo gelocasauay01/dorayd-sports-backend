@@ -1,6 +1,5 @@
 package com.dorayd.sports.features.user.repositories;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -10,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import com.dorayd.sports.features.user.models.Gender;
+import com.dorayd.sports.features.user.mappers.UserMapper;
 import com.dorayd.sports.features.user.models.User;
 
 @Repository
@@ -34,14 +33,7 @@ public class UserRepositoryImpl implements UserRepository{
     public Optional<User> findById(Long id) {
         try {
             User user = jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
-                (rs, rowNum) -> new User(
-                    rs.getLong("id"),
-                    rs.getString("first_name"),
-                    rs.getString("middle_name"),
-                    rs.getString("last_name"),
-                    LocalDate.parse(rs.getString("birth_date")),
-                    Gender.valueOf(rs.getString("gender"))
-                ),
+                new UserMapper(),
                 id
             );
             return Optional.of(user);

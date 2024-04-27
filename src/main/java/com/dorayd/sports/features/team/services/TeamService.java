@@ -3,6 +3,7 @@ package com.dorayd.sports.features.team.services;
 import java.util.Optional;
 
 import com.dorayd.sports.features.team.models.Team;
+import com.dorayd.sports.features.user.models.User;
 
 /**
  * This interface represents the service for managing teams.
@@ -40,4 +41,6 @@ public interface TeamService {
      * @return A boolean indicating whether the deletion was successful.
      */
     boolean delete(Long id);
+
+    Team addPlayer(User user, Long teamId);
 }

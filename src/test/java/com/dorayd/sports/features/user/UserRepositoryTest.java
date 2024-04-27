@@ -34,7 +34,7 @@ public class UserRepositoryTest {
 
         // Assert
         assertTrue(actual.isPresent());
-        assertTrue(isUserEqual(expected, actual.get()));
+        assertTrue(UserTestHelper.isUserEqual(expected, actual.get()));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class UserRepositoryTest {
         // Assert 
         assertNotNull(actual.getId());
         assertTrue(actual.getId().compareTo(0l) > 0);
-        assertTrue(isUserEqual(input, actual));
+        assertTrue(UserTestHelper.isUserEqual(input, actual));
     }
 
     @Test
@@ -72,10 +72,10 @@ public class UserRepositoryTest {
 
         // Assert
         assertEquals(id, actual.getId());
-        assertTrue(isUserEqual(update, actual));
+        assertTrue(UserTestHelper.isUserEqual(update, actual));
         assertTrue(queriedAActual.isPresent());
         assertEquals(id, queriedAActual.get().getId());
-        assertTrue(isUserEqual(update, queriedAActual.get()));
+        assertTrue(UserTestHelper.isUserEqual(update, queriedAActual.get()));
     }
 
     @Test
@@ -90,13 +90,5 @@ public class UserRepositoryTest {
         // Assert
         assertTrue(isDeleted);
         assertFalse(queried.isPresent());
-    }
-
-    private boolean isUserEqual(User a, User b) {
-        return a.getFirstName().equals(b.getFirstName())
-            && a.getMiddleName().equals(b.getMiddleName())
-            && a.getLastName().equals(b.getLastName())
-            && a.getBirthDate().equals(b.getBirthDate())
-            && a.getGender() == b.getGender();
     }
 }

@@ -31,6 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.services.TeamService;
 
+import io.jsonwebtoken.lang.Collections;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
@@ -47,8 +49,8 @@ public class TeamControllerTest {
 
     @BeforeAll
     private void setupAll() {
-        dummyTeam = new Team(1l, "Greenpark Team");
-        dummyTeamJson = "{\"id\":1,\"name\":\"Greenpark Team\"}";
+        dummyTeam = new Team(1l, "Greenpark Team", Collections.emptyList());
+        dummyTeamJson = "{\"id\":1,\"name\":\"Greenpark Team\",\"players\":[]}";
     }
     
     @WithMockUser("gelo")
@@ -91,7 +93,7 @@ public class TeamControllerTest {
         // Act
         MvcResult result = mockMvc.perform(post("/api/team")
             .contentType(MediaType.APPLICATION_JSON)
-            .content( "{\"id\": null,\"title\":\"Greenpark Team\"}")).andReturn();
+            .content( "{\"title\":\"Greenpark Team\"}")).andReturn();
         
         // Assert
         assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
@@ -104,14 +106,14 @@ public class TeamControllerTest {
     @DisplayName("PUT /Team/{id} - OK")
     public void givenUpdate_whenTeamAndIdExists_thenUpdateAndReturnUpdatedTeam() throws Exception {
         // Arrange
-        Team updatedTeam = new Team(1l, "Karangalan Team");
-        String expectedJson = "{\"id\":1,\"name\":\"Karangalan Team\"}";
+        Team updatedTeam = new Team(1l, "Karangalan Team", Collections.emptyList());
+        String expectedJson = "{\"id\":1,\"name\":\"Karangalan Team\",\"players\":[]}";
         doReturn(updatedTeam).when(service).update(anyLong(), any());
 
         //Act
         MvcResult result = mockMvc.perform(put("/api/team/{id}", 1)
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"id\": null,\"name\":\"Karangalan Team\"}")).andReturn();
+            .content("{\"name\":\"Karangalan Team\"}")).andReturn();
         
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -131,5 +133,23 @@ public class TeamControllerTest {
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+    }
+
+    @WithMockUser("gelo")
+    @Test
+    @DisplayName("POST /team/{id}/add_player - OK")
+    public void givenAddPlayer_whenPlayerIsValid_thenAddPlayerToTheTeam() throws Exception {
+        // Arrange
+        doReturn(dummyTeam).when(service).addPlayer(any(), anyLong());
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/api/team/{id}/add_player", 2)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}")).andReturn();
+        
+        // Assert
+        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(dummyTeamJson, result.getResponse().getContentAsString());
     }
 }

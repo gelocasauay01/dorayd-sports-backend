@@ -18,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
-
 public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
 
     // Refer to data-test.sql to know the values of each IDs
@@ -30,7 +29,7 @@ public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
     @DisplayName("GET /team/1 - Found")
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() throws Exception {
         // Arrange
-        String expectedJson = "{\"id\":1,\"name\":\"Team Rocket\"}";
+        String expectedJson = "{\"id\":1,\"name\":\"Team Rocket\",\"players\":[]}";
 
         // Act 
         MvcResult result = mockMvc.perform(get("/api/team/{id}", FIND_ID).with(user(userDetails))).andReturn();
@@ -70,13 +69,13 @@ public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
     @DisplayName("PUT /team/{id} - OK")
     public void givenUpdate_whenTeamAndIdExists_thenUpdateAndReturnUpdatedTeam() throws Exception {
         // Arrange
-        String expectedJson = String.format("{\"id\":%d,\"name\":\"Karangalan Team\"}", UPDATE_ID);
+        String expectedJson = String.format("{\"id\":%d,\"name\":\"Karangalan Team\",\"players\":[]}", UPDATE_ID);
 
         //Act
         MvcResult result = mockMvc.perform(put("/api/team/{id}", UPDATE_ID)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"id\": null,\"name\":\"Karangalan Team\"}")).andReturn();
+            .content("{\"name\":\"Karangalan Team\",\"players\":[]}")).andReturn();
         
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -93,5 +92,20 @@ public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+    }
+
+    @Test
+    @DisplayName("POST /team/{id}/add_player - OK")
+    public void givenAddPlayer_whenPlayerIsValid_thenAddPlayerToTheTeam() throws Exception {
+        // Act
+        MvcResult result = mockMvc.perform(post("/api/team/{id}/add_player", UPDATE_ID)
+            .with(user(userDetails))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}")).andReturn();
+        
+        // Assert
+        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertTrue(result.getResponse().getContentAsString().contains("OG"));
     }
 }

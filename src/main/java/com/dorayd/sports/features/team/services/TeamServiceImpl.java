@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.repositories.TeamRepository;
+import com.dorayd.sports.features.user.models.User;
 
 @Service
 public class TeamServiceImpl implements TeamService{
@@ -39,5 +40,11 @@ public class TeamServiceImpl implements TeamService{
     public boolean delete(Long id) {
         logger.info("Deleting team with id {}", id);
         return repository.delete(id);
+    }
+
+    @Override
+    public Team addPlayer(User user, Long teamId) {
+        logger.info("Adding user: {} in team with id {}", user, teamId);
+        return repository.addPlayer(user, teamId);
     }
 }

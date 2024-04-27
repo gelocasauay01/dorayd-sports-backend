@@ -3,6 +3,7 @@ package com.dorayd.sports.features.team.repositories;
 import java.util.Optional;
 
 import com.dorayd.sports.features.team.models.Team;
+import com.dorayd.sports.features.user.models.User;
 
 /**
  * This interface represents a repository for managing Teams.
@@ -40,4 +41,6 @@ public interface TeamRepository {
      * @return A boolean indicating whether the deletion was successful.
      */
     boolean delete(Long id);
+
+    Team addPlayer(User user, Long teamId);
 }

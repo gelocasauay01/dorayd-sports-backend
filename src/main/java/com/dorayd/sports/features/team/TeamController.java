@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.services.TeamService;
+import com.dorayd.sports.features.user.models.User;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -75,6 +76,13 @@ public class TeamController {
                 .status(HttpStatus.NOT_FOUND)
                 .build();
         }
+    }
+
+    @PostMapping("/{teamId}/add_player")
+    public ResponseEntity<Team> addPlayer(@PathVariable Long teamId, @RequestBody User newPlayer) {
+        return ResponseEntity
+            .ok()
+            .body(service.addPlayer(newPlayer, teamId));
     }
     
 }
