@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -50,6 +51,7 @@ public class TeamControllerTest {
         dummyTeamJson = "{\"id\":1,\"name\":\"Greenpark Team\"}";
     }
     
+    @WithMockUser("gelo")
     @Test
     @DisplayName("GET /team/1 - Found")
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() throws Exception {
@@ -65,6 +67,7 @@ public class TeamControllerTest {
         assertEquals(dummyTeamJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("GET /team/1 - Not Found")
     public void givenFindById_whenTeamDoesNotExist_thenReturnNotFoundStatus() throws Exception {
@@ -78,6 +81,7 @@ public class TeamControllerTest {
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("POST /team - CREATED")
     public void givenCreate_whenTeamIsValid_thenReturnCreatedTeam() throws Exception {
@@ -95,6 +99,7 @@ public class TeamControllerTest {
         assertEquals(dummyTeamJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("PUT /Team/{id} - OK")
     public void givenUpdate_whenTeamAndIdExists_thenUpdateAndReturnUpdatedTeam() throws Exception {
@@ -114,6 +119,7 @@ public class TeamControllerTest {
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("DELETE /Team/{id} - OK")
     public void givenDelete_whenTeamWithIdExists_thenDeleteTeam() throws Exception {

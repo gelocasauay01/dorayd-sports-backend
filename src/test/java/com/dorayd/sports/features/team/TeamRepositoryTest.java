@@ -10,12 +10,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.repositories.TeamRepository;
-import com.dorayd.sports.helpers.SqlQueryExecutor;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -23,9 +21,6 @@ public class TeamRepositoryTest {
     
     @Autowired
     private TeamRepository repository;
-
-    @Autowired 
-    private JdbcTemplate jdbcTemplate;
 
     @Test
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() {
@@ -84,11 +79,11 @@ public class TeamRepositoryTest {
     @Test
     public void givenDelete_whenTeamExists_thenDelete() {
         // Arrange
-        Long id = SqlQueryExecutor.insert("INSERT INTO teams(name) VALUES('Nirvana')", jdbcTemplate);
+        final long DELETE_ID = 4l;
 
         // Act 
-        boolean isDeleted = repository.delete(id);
-        Optional<Team> queried = repository.findById(id);
+        boolean isDeleted = repository.delete(DELETE_ID);
+        Optional<Team> queried = repository.findById(DELETE_ID);
 
         // Assert
         assertTrue(isDeleted);

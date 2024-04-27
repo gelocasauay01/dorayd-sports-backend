@@ -5,32 +5,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import com.dorayd.sports.core.test_templates.IntegrationTestWithAuthentication;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-public class UserIntegrationTest {
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
+public class UserIntegrationTest extends IntegrationTestWithAuthentication{
 
     // Refer to data-test.sql to know the values of each IDs
     private final int FIND_ID = 1;
     private final int UPDATE_ID = 2;
     private final int DELETE_ID = 3;
-    
-    @Autowired
-    private MockMvc mockMvc;
 
     @Test
     @DisplayName("GET /user/1 - Found")
@@ -39,7 +32,7 @@ public class UserIntegrationTest {
         String expectedJson = "{\"id\":1,\"firstName\":\"Joseph\",\"middleName\":\"Mardo\",\"lastName\":\"Casauay\",\"birthDate\":\"1999-08-01\",\"gender\":\"MALE\"}";
 
         // Act 
-        MvcResult result = mockMvc.perform(get("/api/user/{id}", FIND_ID)).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/user/{id}", FIND_ID).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -51,7 +44,7 @@ public class UserIntegrationTest {
     @DisplayName("GET /user/1 - Not Found")
     public void givenFindById_whenUserDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         // Act 
-        MvcResult result = mockMvc.perform(get("/api/user/{id}", 100)).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/user/{id}", 100).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
@@ -63,6 +56,7 @@ public class UserIntegrationTest {
         // Act
         String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
         MvcResult result = mockMvc.perform(post("/api/user")
+            .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content(expected)).andReturn();
         
@@ -80,6 +74,7 @@ public class UserIntegrationTest {
 
         //Act
         MvcResult result = mockMvc.perform(put("/api/user/{id}", UPDATE_ID)
+            .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content(expected)).andReturn();
         
@@ -94,7 +89,7 @@ public class UserIntegrationTest {
     public void givenDelete_whenUserWithIdExists_thenDeleteUser() throws Exception {
 
         // Act
-        MvcResult result = mockMvc.perform(delete("/api/user/{id}", DELETE_ID)).andReturn();
+        MvcResult result = mockMvc.perform(delete("/api/user/{id}", DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());

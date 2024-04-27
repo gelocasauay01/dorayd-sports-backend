@@ -1,0 +1,67 @@
+package com.dorayd.sports.features.auth.services;
+
+import java.util.Date;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.dorayd.sports.features.auth.models.AuthenticationResponse;
+import com.dorayd.sports.features.auth.models.UserAuth;
+import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
+
+@Service
+public class AuthenticationServiceImpl implements AuthenticationService{
+
+    @Autowired
+    private UserAuthRepository userAuthRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    private static final Logger LOG = LogManager.getLogger(AuthenticationServiceImpl.class);
+
+    @Override
+    public AuthenticationResponse register(UserAuth newUserAuth) {
+        // Encode password before saving
+        String encodedPassword = passwordEncoder.encode(newUserAuth.getPassword());
+        newUserAuth.setPassword(encodedPassword);
+
+        UserAuth registeredUserAuth = userAuthRepository.create(newUserAuth);
+
+        LOG.info("Successfully registered user: {}", registeredUserAuth.getUsername());
+        
+        return new AuthenticationResponse(registeredUserAuth.getUser(), generateTokenWithNowIssueDateAndTomorrowExpiration(registeredUserAuth));
+    }
+
+    @Override
+    public AuthenticationResponse authenticate(UserAuth userAuthFromRequest) {
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+            userAuthFromRequest.getUsername(), 
+            userAuthFromRequest.getPassword()
+        );
+        authenticationManager.authenticate(authentication);
+
+        LOG.info("Successfully authenticated user: {}", userAuthFromRequest.getUsername());
+
+        UserAuth userAuth = userAuthRepository.findByUsername(userAuthFromRequest.getUsername()).get();
+        return new AuthenticationResponse(userAuth.getUser(),  generateTokenWithNowIssueDateAndTomorrowExpiration(userAuth));
+    }
+
+    private String generateTokenWithNowIssueDateAndTomorrowExpiration(UserAuth userAuth) {
+        Date now = new Date(System.currentTimeMillis());
+        Date tomorrow =  new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+        return jwtService.generateToken(userAuth, now, tomorrow);
+    }
+    
+}

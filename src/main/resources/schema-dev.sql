@@ -16,3 +16,11 @@ CREATE TABLE IF NOT EXISTS users (
     birth_date DATE NOT NULL,
     gender VARCHAR(30) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_auth (
+    username TEXT PRIMARY KEY,
+    password TEXT NOT NULL,
+    role VARCHAR(10) NOT NULL,
+    user_id INT NOT NULL,
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);

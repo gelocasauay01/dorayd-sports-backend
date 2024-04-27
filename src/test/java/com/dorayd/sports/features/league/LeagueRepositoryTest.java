@@ -3,12 +3,10 @@ package com.dorayd.sports.features.league;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.dorayd.sports.features.league.models.League;
 import com.dorayd.sports.features.league.repositories.LeagueRepository;
-import com.dorayd.sports.helpers.SqlQueryExecutor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,10 +21,6 @@ public class LeagueRepositoryTest {
     
     @Autowired
     private LeagueRepository repository;
-
-    @Autowired 
-    private JdbcTemplate jdbcTemplate;
-
 
     @Test
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() {
@@ -86,11 +80,11 @@ public class LeagueRepositoryTest {
     @Test
     public void givenDelete_whenLeagueExists_thenDelete() {
         // Arrange
-        Long id = SqlQueryExecutor.insert("INSERT INTO leagues(title) VALUES('Sitio Kapayapaan League')", jdbcTemplate);
+        final long DELETE_ID = 4l;
 
         // Act 
-        boolean isDeleted = repository.delete(id);
-        Optional<League> queried = repository.findById(id);
+        boolean isDeleted = repository.delete(DELETE_ID);
+        Optional<League> queried = repository.findById(DELETE_ID);
 
         // Assert
         assertTrue(isDeleted);

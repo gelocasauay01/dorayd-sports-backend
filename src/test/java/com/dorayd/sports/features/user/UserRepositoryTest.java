@@ -11,13 +11,11 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.dorayd.sports.features.user.models.Gender;
 import com.dorayd.sports.features.user.models.User;
 import com.dorayd.sports.features.user.repositories.UserRepository;
-import com.dorayd.sports.helpers.SqlQueryExecutor;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -25,9 +23,6 @@ public class UserRepositoryTest {
     
     @Autowired
     private UserRepository repository;
-
-    @Autowired 
-    private JdbcTemplate jdbcTemplate;
 
     @Test
     public void givenFindById_whenUserExists_thenReturnSpecificUser() {
@@ -86,11 +81,11 @@ public class UserRepositoryTest {
     @Test
     public void givenDelete_whenUserExists_thenDelete() {
         // Arrange
-        Long id = SqlQueryExecutor.insert("INSERT INTO users(first_name, last_name, birth_date, gender) VALUES('Kramnik', 'Jayson', '1985-01-11', 'NON_BINARY');", jdbcTemplate);
+        final long DELETE_ID = 4l;
 
         // Act 
-        boolean isDeleted = repository.delete(id);
-        Optional<User> queried = repository.findById(id);
+        boolean isDeleted = repository.delete(DELETE_ID);
+        Optional<User> queried = repository.findById(DELETE_ID);
 
         // Assert
         assertTrue(isDeleted);

@@ -7,4 +7,3 @@ spring:
     init:
       platform: dev
       mode: always
-      

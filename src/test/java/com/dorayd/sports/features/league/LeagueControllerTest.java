@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -47,8 +48,9 @@ public class LeagueControllerTest {
     private void setupAll() {
         dummyLeague = new League(1l, "Greenpark Summer League");
         dummyLeagueJson = "{\"id\":1,\"title\":\"Greenpark Summer League\"}";
-    }
+    }   
     
+    @WithMockUser("gelo")
     @Test
     @DisplayName("GET /league/1 - Found")
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
@@ -64,6 +66,7 @@ public class LeagueControllerTest {
         assertEquals(dummyLeagueJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("GET /league/1 - Not Found")
     public void givenFindById_whenLeagueDoesNotExist_thenReturnNotFoundStatus() throws Exception {
@@ -77,6 +80,7 @@ public class LeagueControllerTest {
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("POST /league - CREATED")
     public void givenCreate_whenLeagueIsValid_thenReturnCreatedLeague() throws Exception {
@@ -94,6 +98,7 @@ public class LeagueControllerTest {
         assertEquals(dummyLeagueJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("PUT /league/{id} - OK")
     public void givenUpdate_whenLeagueAndIdExists_thenUpdateAndReturnUpdatedLeague() throws Exception {
@@ -111,8 +116,9 @@ public class LeagueControllerTest {
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
         assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
         assertEquals(expectedJson, result.getResponse().getContentAsString());
-    }
+    }   
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("DELETE /league/{id} - OK")
     public void givenDelete_whenLeagueWithIdExists_thenDeleteLeague() throws Exception {

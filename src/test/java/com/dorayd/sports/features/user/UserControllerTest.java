@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -52,6 +53,7 @@ public class UserControllerTest {
         dummyUserJson = "{\"id\":1,\"firstName\":\"Joseph\",\"middleName\":\"Mardo\",\"lastName\":\"Casauay\",\"birthDate\":\"1999-08-01\",\"gender\":\"MALE\"}";
     }
     
+    @WithMockUser("gelo")
     @Test
     @DisplayName("GET /user/1 - Found")
     public void givenFindById_whenUserExists_thenReturnSpecificUser() throws Exception {
@@ -67,6 +69,7 @@ public class UserControllerTest {
         assertEquals(dummyUserJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("GET /user/1 - Not Found")
     public void givenFindById_whenUserDoesNotExist_thenReturnNotFoundStatus() throws Exception {
@@ -80,6 +83,7 @@ public class UserControllerTest {
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("POST /user - CREATED")
     public void givenCreate_whenUserIsValid_thenReturnCreatedUser() throws Exception {
@@ -97,6 +101,7 @@ public class UserControllerTest {
         assertEquals(dummyUserJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("PUT /User/{id} - OK")
     public void givenUpdate_whenUserAndIdExists_thenUpdateAndReturnUpdatedUser() throws Exception {
@@ -116,6 +121,7 @@ public class UserControllerTest {
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
+    @WithMockUser("gelo")
     @Test
     @DisplayName("DELETE /User/{id} - OK")
     public void givenDelete_whenUserWithIdExists_thenDeleteUser() throws Exception {
