@@ -9,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.user.mappers.UserMapper;
@@ -29,7 +28,6 @@ public class TeamRepositoryImpl implements TeamRepository{
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert teamSimpleJdbcInsert;
     private SimpleJdbcInsert membershipSimpleJdbcInsert;
-    private UserRepository userRepository;
 
     public TeamRepositoryImpl(JdbcTemplate jdbcTemplate, UserRepository userRepository) {
         this.jdbcTemplate = jdbcTemplate;
@@ -38,7 +36,6 @@ public class TeamRepositoryImpl implements TeamRepository{
             .usingGeneratedKeyColumns("id");
         this.membershipSimpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate)
             .withTableName("user_team_memberships");
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,14 +54,15 @@ public class TeamRepositoryImpl implements TeamRepository{
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", newTeam.getName());
         
-        // Insert to database and get the generated id
+        // Save team get the generated id
         Number newId = teamSimpleJdbcInsert.executeAndReturnKey(parameters);
         newTeam.setId(newId.longValue());
 
+         // Save user memberships if players is not empty
         if(newTeam.getPlayers() != null && !newTeam.getPlayers().isEmpty()) {
-            savePlayers(newTeam.getPlayers());
+            insertUserMembership(newTeam.getPlayers(), newTeam.getId());
         }
-
+       
         return newTeam;
     }
 
@@ -83,18 +81,7 @@ public class TeamRepositoryImpl implements TeamRepository{
 
     @Override
     public Team addPlayer(User user, Long teamId) {
-        Map<String, Object> parameters = new HashMap<>();
-
-        // Save user when it still does not exist
-        if(user.getId() == null) {
-            User createdUser = userRepository.create(user);
-            user.setId(createdUser.getId());
-        }
-
-        parameters.put("team_id", teamId);
-        parameters.put("user_id", user.getId());
-        membershipSimpleJdbcInsert.execute(parameters);
-
+        membershipSimpleJdbcInsert.execute(createTeamMembershipParameters(teamId, user.getId()));
         return findById(teamId).orElseThrow();
     }
 
@@ -113,18 +100,21 @@ public class TeamRepositoryImpl implements TeamRepository{
         return jdbcTemplate.query(GET_ALL_PLAYER_ID, new UserMapper(), id);
     }
 
-    @Transactional
-    private void savePlayers(List<User> players) {
-        for(int index = 0; index < players.size(); index++) {
-            User user = players.get(index);
-            if(user.getId() == null) {
-                User createdUser = userRepository.create(user);
-                user.setId(createdUser.getId());
-            } else {
-                Optional<User> queriedUser = userRepository.findById(user.getId());
-                players.set(index, queriedUser.orElseThrow());
-            }        
+    private void insertUserMembership(List<User> users, Long teamId) {
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> parameters[] = (Map<String, Object>[]) new Map[users.size()];
+
+        for(int index = 0; index < users.size(); index++) {
+            parameters[index] = createTeamMembershipParameters(teamId, users.get(index).getId());
         }
+        membershipSimpleJdbcInsert.executeBatch(parameters);
     }
-    
+
+    private Map<String, Object> createTeamMembershipParameters(Long teamId, Long userId) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("team_id", teamId);
+        parameters.put("user_id", userId);
+        return parameters;
+    }
 }
