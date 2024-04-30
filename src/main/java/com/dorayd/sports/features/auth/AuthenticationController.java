@@ -19,8 +19,11 @@ import com.dorayd.sports.features.auth.services.AuthenticationService;
 public class AuthenticationController {
     public final static String AUTH_API_URL = "/api/auth";
 
-    @Autowired
-    private AuthenticationService service;
+    private final AuthenticationService service;
+
+    public AuthenticationController(AuthenticationService service) {
+        this.service = service;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserAuth newUserAuth) {

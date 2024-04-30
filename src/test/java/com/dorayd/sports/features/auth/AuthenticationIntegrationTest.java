@@ -36,7 +36,7 @@ public class AuthenticationIntegrationTest {
   
 
     @BeforeAll
-    private void setupAll() {
+    public void setupAll() {
         testInvalidLoginInput = """
             {
                 "username": "abc1234560984560984",

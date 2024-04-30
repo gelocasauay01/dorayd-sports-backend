@@ -27,10 +27,10 @@ public class TeamRepositoryTest {
     @Test
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() {
         // Arrange
-        Team expected = new Team(1l, "Team Rocket", new ArrayList<>());
+        Team expected = new Team(1L, "Team Rocket", new ArrayList<>());
 
         // Act
-        Optional<Team> actual = repository.findById(1l);
+        Optional<Team> actual = repository.findById(1L);
 
         // Assert
         assertTrue(actual.isPresent());
@@ -40,10 +40,10 @@ public class TeamRepositoryTest {
     @Test
     public void givenFindById_whenTeamDoesExists_thenReturnNotFoundStatus() {
         // Act
-        Optional<Team> actual = repository.findById(10l);
+        Optional<Team> actual = repository.findById(10L);
 
         // Assert
-        assertTrue(!actual.isPresent());
+        assertTrue(actual.isEmpty());
     }
 
     @Test 
@@ -56,7 +56,7 @@ public class TeamRepositoryTest {
 
         // Assert 
         assertNotNull(actual.getId());
-        assertTrue(actual.getId().compareTo(0l) > 0);
+        assertTrue(actual.getId().compareTo(0L) > 0);
         assertEquals(input.getName(), actual.getName());
         assertTrue(input.getPlayers().isEmpty());
     }
@@ -65,7 +65,7 @@ public class TeamRepositoryTest {
     public void givenUpdate_whenTeamExists_thenUpdateTeamAndReturn() {
         // Arrange
         Team update = new Team(null, "Tekken Gang", new ArrayList<>());
-        Long id = 2l;
+        Long id = 2L;
 
         // Act
         Team actual = repository.update(id, update);
@@ -82,7 +82,7 @@ public class TeamRepositoryTest {
     @Test
     public void givenDelete_whenTeamExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4l;
+        final long DELETE_ID = 4L;
 
         // Act 
         boolean isDeleted = repository.delete(DELETE_ID);

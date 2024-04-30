@@ -27,10 +27,10 @@ public class UserRepositoryTest {
     @Test
     public void givenFindById_whenUserExists_thenReturnSpecificUser() {
         // Arrange
-        User expected = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expected = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
 
         // Act
-        Optional<User> actual = repository.findById(1l);
+        Optional<User> actual = repository.findById(1L);
 
         // Assert
         assertTrue(actual.isPresent());
@@ -40,10 +40,10 @@ public class UserRepositoryTest {
     @Test
     public void givenFindById_whenUserDoesExists_thenReturnNotFoundStatus() {
         // Act
-        Optional<User> actual = repository.findById(10l);
+        Optional<User> actual = repository.findById(10L);
 
         // Assert
-        assertTrue(!actual.isPresent());
+        assertTrue(actual.isEmpty());
     }
 
     @Test 
@@ -56,7 +56,7 @@ public class UserRepositoryTest {
 
         // Assert 
         assertNotNull(actual.getId());
-        assertTrue(actual.getId().compareTo(0l) > 0);
+        assertTrue(actual.getId().compareTo(0L) > 0);
         assertTrue(UserTestHelper.isUserEqual(input, actual));
     }
 
@@ -64,7 +64,7 @@ public class UserRepositoryTest {
     public void givenUpdate_whenUserExists_thenUpdateUserAndReturn() {
         // Arrange
         User update = new User(null, "Jones", "Hayley", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        Long id = 2l;
+        Long id = 2L;
 
         // Act
         User actual = repository.update(id, update);
@@ -81,7 +81,7 @@ public class UserRepositoryTest {
     @Test
     public void givenDelete_whenUserExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4l;
+        final long DELETE_ID = 4L;
 
         // Act 
         boolean isDeleted = repository.delete(DELETE_ID);

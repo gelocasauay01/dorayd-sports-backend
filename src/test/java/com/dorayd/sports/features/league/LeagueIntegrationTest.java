@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.dorayd.sports.core.test_templates.IntegrationTestWithAuthentication;
 
+import java.util.Objects;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,11 +23,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class LeagueIntegrationTest extends IntegrationTestWithAuthentication{
 
-    // Refer to data-test.sql to know the values of each IDs
-    private final int FIND_ID = 1;
-    private final int UPDATE_ID = 2;
-    private final int DELETE_ID = 3;
-    
     @Test
     @DisplayName("GET /league/1 - Found")
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
@@ -33,11 +30,13 @@ public class LeagueIntegrationTest extends IntegrationTestWithAuthentication{
         String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\"}";
 
         // Act 
+        // Refer to data-test.sql to know the values of each IDs
+        int FIND_ID = 1;
         MvcResult result = mockMvc.perform(get("/api/league/{id}", FIND_ID).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
@@ -62,7 +61,7 @@ public class LeagueIntegrationTest extends IntegrationTestWithAuthentication{
         
         // Assert
         assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
-        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertTrue(result.getResponse().getContentAsString().contains("Greenpark Summer League"));
     }
 
@@ -70,6 +69,7 @@ public class LeagueIntegrationTest extends IntegrationTestWithAuthentication{
     @DisplayName("PUT /league/{id} - OK")
     public void givenUpdate_whenLeagueAndIdExists_thenUpdateAndReturnUpdatedLeague() throws Exception {
         // Arrange
+        int UPDATE_ID = 2;
         String expectedJson = String.format("{\"id\":%d,\"title\":\"Karangalan League\"}", UPDATE_ID);
 
         //Act
@@ -80,7 +80,7 @@ public class LeagueIntegrationTest extends IntegrationTestWithAuthentication{
         
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
@@ -89,6 +89,7 @@ public class LeagueIntegrationTest extends IntegrationTestWithAuthentication{
     public void givenDelete_whenLeagueWithIdExists_thenDeleteLeague() throws Exception {
 
         // Act
+        int DELETE_ID = 3;
         MvcResult result = mockMvc.perform(delete("/api/league/{id}", DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dorayd.sports.features.team.models.Team;
@@ -15,48 +14,49 @@ import com.dorayd.sports.features.user.repositories.UserRepository;
 
 @Service
 public class TeamServiceImpl implements TeamService{
-    
-    @Autowired
-    private TeamRepository repository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final Logger LOG = LogManager.getLogger(TeamServiceImpl.class);
 
-    private static final Logger logger = LogManager.getLogger(TeamServiceImpl.class);
+    private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
 
+    public TeamServiceImpl(TeamRepository teamRepository, UserRepository userRepository) {
+        this.teamRepository = teamRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public Optional<Team> findById(Long id) {
-        logger.info("Finding Team with id: {}", id);
-        return repository.findById(id);
+        LOG.info("Finding Team with id: {}", id);
+        return teamRepository.findById(id);
     }
 
     @Override
     public Team create(Team newTeam) {
-        logger.info("Saving team to the database: {}", newTeam);
+        LOG.info("Saving team to the database: {}", newTeam);
 
         if(newTeam.getPlayers() != null && !newTeam.getPlayers().isEmpty()) {
             savePlayers(newTeam.getPlayers());
         }
 
-        return repository.create(newTeam);
+        return teamRepository.create(newTeam);
     }
 
     @Override
     public Team update(Long id, Team updatedTeam) {
-        logger.info("Updating team with id {} with {}", id, updatedTeam);
-        return repository.update(id, updatedTeam);
+        LOG.info("Updating team with id {} with {}", id, updatedTeam);
+        return teamRepository.update(id, updatedTeam);
     }
 
     @Override
     public boolean delete(Long id) {
-        logger.info("Deleting team with id {}", id);
-        return repository.delete(id);
+        LOG.info("Deleting team with id {}", id);
+        return teamRepository.delete(id);
     }
 
     @Override
     public Team addPlayer(User user, Long teamId) {
-        logger.info("Adding user: {} in team with id {}", user, teamId);
+        LOG.info("Adding user: {} in team with id {}", user, teamId);
 
         // Save user when it still does not exist
         if(user.getId() == null) {
@@ -64,7 +64,7 @@ public class TeamServiceImpl implements TeamService{
             user.setId(createdUser.getId());
         }
 
-        return repository.addPlayer(user, teamId);
+        return teamRepository.addPlayer(user, teamId);
     }
 
     private void savePlayers(List<User> players) {

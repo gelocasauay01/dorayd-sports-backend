@@ -16,12 +16,10 @@ import com.dorayd.sports.features.user.repositories.UserRepository;
 
 @Repository
 public class UserAuthRepositoryImpl implements UserAuthRepository {
-    private final String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE username = ?";
-    private final String UPDATE_PASSWORD_BY_USERNAME_QUERY = "UPDATE user_auth SET password = ? WHERE username = ?";
 
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert simpleJdbcInsert;
-    private UserRepository userRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
+    private final UserRepository userRepository;
 
     public UserAuthRepositoryImpl(JdbcTemplate jdbcTemplate, UserRepository userRepository) {
         this.jdbcTemplate = jdbcTemplate;
@@ -33,7 +31,8 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
     @Override
     public Optional<UserAuth> findByUsername(String username) {
         try {
-            UserAuth queriedUserAuth = jdbcTemplate.queryForObject(FIND_BY_USERNAME_QUERY, 
+            String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE username = ?";
+            UserAuth queriedUserAuth = jdbcTemplate.queryForObject(FIND_BY_USERNAME_QUERY,
                 (rs, rowNum) -> {
                     User user = new User();
                     user.setId(rs.getLong("user_id"));
@@ -74,6 +73,7 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
 
     @Override
     public boolean updatePassword(String password, String username) {
+        String UPDATE_PASSWORD_BY_USERNAME_QUERY = "UPDATE user_auth SET password = ? WHERE username = ?";
         int updatedCount = jdbcTemplate.update(UPDATE_PASSWORD_BY_USERNAME_QUERY, password, username);
         return updatedCount > 0;
     }

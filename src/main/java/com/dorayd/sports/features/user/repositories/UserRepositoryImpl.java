@@ -15,10 +15,6 @@ import com.dorayd.sports.features.user.models.User;
 @Repository
 public class UserRepositoryImpl implements UserRepository{
 
-    private final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
-    private final String DELETE_BY_ID_QUERY = "DELETE FROM users WHERE id = ?";
-    private final String UPDATE_BY_ID_QUERY = "UPDATE users SET first_name = ?, middle_name = ?, last_name = ?, birth_date = ?, gender = ? WHERE id = ?";
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
@@ -32,6 +28,7 @@ public class UserRepositoryImpl implements UserRepository{
     @Override
     public Optional<User> findById(Long id) {
         try {
+            String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
             User user = jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
                 new UserMapper(),
                 id
@@ -57,6 +54,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User update(Long id, User updatedUser) {
+        String UPDATE_BY_ID_QUERY = "UPDATE users SET first_name = ?, middle_name = ?, last_name = ?, birth_date = ?, gender = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedUser.getFirstName(), updatedUser.getMiddleName(), updatedUser.getLastName(), updatedUser.getBirthDate().toString(), updatedUser.getGender().toString(), id);
         updatedUser.setId(id);
         return updatedUser;
@@ -64,6 +62,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public boolean delete(Long id) {
+        String DELETE_BY_ID_QUERY = "DELETE FROM users WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }

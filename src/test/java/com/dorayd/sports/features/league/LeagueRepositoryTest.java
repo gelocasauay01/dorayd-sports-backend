@@ -25,10 +25,10 @@ public class LeagueRepositoryTest {
     @Test
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() {
         // Arrange
-        League expected = new League(1l, "Greenpark league");
+        League expected = new League(1L, "Greenpark league");
 
         // Act
-        Optional<League> actual = repository.findById(1l);
+        Optional<League> actual = repository.findById(1L);
 
         // Assert
         assertTrue(actual.isPresent());
@@ -39,10 +39,10 @@ public class LeagueRepositoryTest {
     @Test
     public void givenFindById_whenLeagueDoesExists_thenReturnNotFoundStatus() {
         // Act
-        Optional<League> actual = repository.findById(10l);
+        Optional<League> actual = repository.findById(10L);
 
         // Assert
-        assertTrue(!actual.isPresent());
+        assertTrue(actual.isEmpty());
     }
 
     @Test 
@@ -55,7 +55,7 @@ public class LeagueRepositoryTest {
 
         // Assert 
         assertNotNull(actual.getId());
-        assertTrue(actual.getId().compareTo(0l) > 0);
+        assertTrue(actual.getId().compareTo(0L) > 0);
         assertEquals(input.getTitle(), actual.getTitle());
     }
 
@@ -63,7 +63,7 @@ public class LeagueRepositoryTest {
     public void givenUpdate_whenLeagueExists_thenUpdateLeagueAndReturn() {
         // Arrange
         League update = new League(null, "Tekken Tournament");
-        Long id = 2l;
+        Long id = 2L;
 
         // Act
         League actual = repository.update(id, update);
@@ -80,7 +80,7 @@ public class LeagueRepositoryTest {
     @Test
     public void givenDelete_whenLeagueExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4l;
+        final long DELETE_ID = 4L;
 
         // Act 
         boolean isDeleted = repository.delete(DELETE_ID);

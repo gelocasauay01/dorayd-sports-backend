@@ -20,14 +20,9 @@ import io.jsonwebtoken.lang.Collections;
 @Repository
 public class TeamRepositoryImpl implements TeamRepository{
 
-    private final String FIND_BY_ID_QUERY = "SELECT * FROM teams WHERE id = ?";
-    private final String DELETE_BY_ID_QUERY = "DELETE FROM teams WHERE id = ?";
-    private final String UPDATE_BY_ID_QUERY = "UPDATE teams SET name = ? WHERE id = ?";
-    private final String GET_ALL_PLAYER_ID = "SELECT * FROM user_team_memberships AS utm JOIN users AS u ON utm.user_id = u.id WHERE utm.team_id = ?";
-
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert teamSimpleJdbcInsert;
-    private SimpleJdbcInsert membershipSimpleJdbcInsert;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert teamSimpleJdbcInsert;
+    private final SimpleJdbcInsert membershipSimpleJdbcInsert;
 
     public TeamRepositoryImpl(JdbcTemplate jdbcTemplate, UserRepository userRepository) {
         this.jdbcTemplate = jdbcTemplate;
@@ -68,6 +63,7 @@ public class TeamRepositoryImpl implements TeamRepository{
 
     @Override
     public Team update(Long id, Team updatedTeam) {
+        String UPDATE_BY_ID_QUERY = "UPDATE teams SET name = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedTeam.getName(), id);
         updatedTeam.setId(id);
         return updatedTeam;
@@ -75,6 +71,7 @@ public class TeamRepositoryImpl implements TeamRepository{
 
     @Override
     public boolean delete(Long id) {
+        String DELETE_BY_ID_QUERY = "DELETE FROM teams WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }
@@ -85,7 +82,8 @@ public class TeamRepositoryImpl implements TeamRepository{
         return findById(teamId).orElseThrow();
     }
 
-    private Team getTeam(Long teamId) { 
+    private Team getTeam(Long teamId) {
+        String FIND_BY_ID_QUERY = "SELECT * FROM teams WHERE id = ?";
         return jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
             (rs, rowNum) -> new Team(
                 rs.getLong("id"),
@@ -97,6 +95,7 @@ public class TeamRepositoryImpl implements TeamRepository{
     }
 
     private List<User> getTeamPlayers(Long id) {
+        String GET_ALL_PLAYER_ID = "SELECT * FROM user_team_memberships AS utm JOIN users AS u ON utm.user_id = u.id WHERE utm.team_id = ?";
         return jdbcTemplate.query(GET_ALL_PLAYER_ID, new UserMapper(), id);
     }
 

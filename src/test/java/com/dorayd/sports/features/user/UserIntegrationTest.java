@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.dorayd.sports.core.test_templates.IntegrationTestWithAuthentication;
 
+import java.util.Objects;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,11 +22,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class UserIntegrationTest extends IntegrationTestWithAuthentication{
 
-    // Refer to data-test.sql to know the values of each IDs
-    private final int FIND_ID = 1;
-    private final int UPDATE_ID = 2;
-    private final int DELETE_ID = 3;
-
     @Test
     @DisplayName("GET /user/1 - Found")
     public void givenFindById_whenUserExists_thenReturnSpecificUser() throws Exception {
@@ -32,11 +29,13 @@ public class UserIntegrationTest extends IntegrationTestWithAuthentication{
         String expectedJson = "{\"id\":1,\"firstName\":\"Joseph\",\"middleName\":\"Mardo\",\"lastName\":\"Casauay\",\"birthDate\":\"1999-08-01\",\"gender\":\"MALE\"}";
 
         // Act 
+        // Refer to data-test.sql to know the values of each IDs
+        int FIND_ID = 1;
         MvcResult result = mockMvc.perform(get("/api/user/{id}", FIND_ID).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
@@ -62,7 +61,7 @@ public class UserIntegrationTest extends IntegrationTestWithAuthentication{
         
         // Assert
         assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
-        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertTrue(result.getResponse().getContentAsString().contains("Boiser"));
     }
 
@@ -70,6 +69,7 @@ public class UserIntegrationTest extends IntegrationTestWithAuthentication{
     @DisplayName("PUT /user/{id} - OK")
     public void givenUpdate_whenUserAndIdExists_thenUpdateAndReturnUpdatedUser() throws Exception {
         // Arrange
+        int UPDATE_ID = 2;
         String expected = String.format("{\"id\":%d,\"firstName\":\"Reynald\",\"middleName\":null,\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}", UPDATE_ID);
 
         //Act
@@ -80,7 +80,7 @@ public class UserIntegrationTest extends IntegrationTestWithAuthentication{
         
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(result.getResponse().getContentType()));
+        assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertEquals(expected, result.getResponse().getContentAsString());
     }
 
@@ -89,6 +89,7 @@ public class UserIntegrationTest extends IntegrationTestWithAuthentication{
     public void givenDelete_whenUserWithIdExists_thenDeleteUser() throws Exception {
 
         // Act
+        int DELETE_ID = 3;
         MvcResult result = mockMvc.perform(delete("/api/user/{id}", DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert

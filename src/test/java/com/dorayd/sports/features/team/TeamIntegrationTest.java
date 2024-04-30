@@ -20,10 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
 
-    // Refer to data-test.sql to know the values of each IDs
-    private final int FIND_ID = 1;
     private final int UPDATE_ID = 2;
-    private final int DELETE_ID = 3;
 
     @Test
     @DisplayName("GET /team/1 - Found")
@@ -32,6 +29,8 @@ public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
         String expectedJson = "{\"id\":1,\"name\":\"Team Rocket\",\"players\":[]}";
 
         // Act 
+        // Refer to data-test.sql to know the values of each IDs
+        int FIND_ID = 1;
         MvcResult result = mockMvc.perform(get("/api/team/{id}", FIND_ID).with(user(userDetails))).andReturn();
 
         // Assert
@@ -88,6 +87,7 @@ public class TeamIntegrationTest extends IntegrationTestWithAuthentication{
     public void givenDelete_whenTeamWithIdExists_thenDeleteTeam() throws Exception {
 
         // Act
+        int DELETE_ID = 3;
         MvcResult result = mockMvc.perform(delete("/api/team/{id}", DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert

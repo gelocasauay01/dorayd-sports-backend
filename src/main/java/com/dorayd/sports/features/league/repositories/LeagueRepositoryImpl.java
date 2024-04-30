@@ -14,10 +14,6 @@ import com.dorayd.sports.features.league.models.League;
 @Repository
 public class LeagueRepositoryImpl implements LeagueRepository{
 
-    private final String FIND_BY_ID_QUERY = "SELECT * FROM leagues WHERE id = ?";
-    private final String DELETE_BY_ID_QUERY = "DELETE FROM leagues WHERE id = ?";
-    private final String UPDATE_BY_ID_QUERY = "UPDATE leagues SET title = ? WHERE id = ?";
-
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
@@ -31,7 +27,8 @@ public class LeagueRepositoryImpl implements LeagueRepository{
     @Override
     public Optional<League> findById(Long id) {
         try {
-            League league = jdbcTemplate.queryForObject(FIND_BY_ID_QUERY, 
+            String FIND_BY_ID_QUERY = "SELECT * FROM leagues WHERE id = ?";
+            League league = jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
             (rs, rowNum) -> new League(
                     rs.getLong("id"),
                     rs.getString("title")
@@ -55,6 +52,7 @@ public class LeagueRepositoryImpl implements LeagueRepository{
 
     @Override
     public League update(Long id, League updatedLeague) {
+        String UPDATE_BY_ID_QUERY = "UPDATE leagues SET title = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedLeague.getTitle(), id);
         updatedLeague.setId(id);
         return updatedLeague;
@@ -62,6 +60,7 @@ public class LeagueRepositoryImpl implements LeagueRepository{
 
     @Override
     public boolean delete(Long id) {
+        String DELETE_BY_ID_QUERY = "DELETE FROM leagues WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }

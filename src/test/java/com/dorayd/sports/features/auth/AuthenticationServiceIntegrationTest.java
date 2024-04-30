@@ -33,7 +33,7 @@ public class AuthenticationServiceIntegrationTest {
     public void givenRegister_whenCredentialsAreValidAndUserDoesNotExist_thenSaveAndReturnAuthenticationResponse() {
         // Arrange
         User expectedUser = new User(null, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        UserAuth userAuth = new UserAuth("asdf123", "password890", Role.USER, expectedUser);
+        UserAuth userAuth = new UserAuth("asdf123456456457", "password890", Role.USER, expectedUser);
 
         // Act
         AuthenticationResponse response = service.register(userAuth);
@@ -56,7 +56,7 @@ public class AuthenticationServiceIntegrationTest {
     @Test
     public void givenLogin_whenUserExists_thenReturnAuthenticationResponse(){ 
         // Arrange
-        User expectedUser = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expectedUser = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         UserAuth expectedUserAuth = new UserAuth("abc123", "password1", Role.USER, expectedUser);
 
         // Act

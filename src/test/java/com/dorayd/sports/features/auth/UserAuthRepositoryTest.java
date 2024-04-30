@@ -29,7 +29,7 @@ public class UserAuthRepositoryTest {
     @Test
     public void givenFindByUsername_whenUserExist_thenReturnUserAuth() {
         // Arrange
-        User expectedUser = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expectedUser = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         UserAuth expectedUserAuth = new UserAuth("abc123", "$2a$10$N35fUCHQ7/OwM4Dcw6LH8uwL8yFIJ/PnoxgAuVDJEUuNlXGANmu1G", Role.USER, expectedUser);
 
         // Act

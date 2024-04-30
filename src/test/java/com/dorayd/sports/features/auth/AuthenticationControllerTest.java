@@ -21,6 +21,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -32,6 +34,8 @@ import com.dorayd.sports.features.user.models.User;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @TestInstance(Lifecycle.PER_CLASS)
 public class AuthenticationControllerTest {
 
@@ -47,8 +51,8 @@ public class AuthenticationControllerTest {
   
 
     @BeforeAll
-    private void setupAll() {
-        User dummyUser = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+    public void setupAll() {
+        User dummyUser = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         dummyResponse = new AuthenticationResponse(dummyUser, "testtoken");
         dummyJson = "{\"user\":{\"id\":1,\"firstName\":\"Joseph\",\"middleName\":\"Mardo\",\"lastName\":\"Casauay\",\"birthDate\":\"1999-08-01\",\"gender\":\"MALE\"},\"token\":\"testtoken\"}";
         testInput = """

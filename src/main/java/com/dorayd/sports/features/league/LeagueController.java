@@ -10,7 +10,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,22 +24,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class LeagueController {
     public static final String LEAGUE_API_URL = "/api/league";
 
-    @Autowired
-    private LeagueService service;
+    private final LeagueService service;
+
+    public LeagueController(LeagueService service) {
+        this.service = service;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<League> findById(@PathVariable Long id) {
         Optional<League> league = service.findById(id);
 
-        if(league.isPresent()) {
-            return ResponseEntity
+        return league.map(value -> ResponseEntity
                 .ok()
-                .body(league.get());
-        }
+                .body(value)).orElseGet(() -> ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build());
 
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .build();
     }
 
     @PostMapping

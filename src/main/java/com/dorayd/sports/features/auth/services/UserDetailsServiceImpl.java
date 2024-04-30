@@ -12,8 +12,11 @@ import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 
-    @Autowired
-    private UserAuthRepository repository;
+    private final UserAuthRepository repository;
+
+    public UserDetailsServiceImpl(UserAuthRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

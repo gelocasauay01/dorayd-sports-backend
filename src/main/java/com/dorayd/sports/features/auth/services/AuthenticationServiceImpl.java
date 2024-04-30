@@ -17,17 +17,17 @@ import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
 
-    @Autowired
-    private UserAuthRepository userAuthRepository;
+    private final UserAuthRepository userAuthRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    public AuthenticationServiceImpl(UserAuthRepository userAuthRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.userAuthRepository = userAuthRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
     private static final Logger LOG = LogManager.getLogger(AuthenticationServiceImpl.class);
 

@@ -36,7 +36,7 @@ public abstract class IntegrationTestWithAuthentication {
 
     @BeforeAll
     protected void setupAll() {
-        User user = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User user = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         userDetails = new UserAuth("abc123", "password1", Role.USER, user);
     }
     

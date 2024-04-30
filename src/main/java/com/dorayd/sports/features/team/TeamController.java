@@ -26,22 +26,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class TeamController {
     public static final String TEAM_API_URL = "/api/team";
 
-    @Autowired
-    private TeamService service;
+    private final TeamService service;
+
+    public TeamController(TeamService service) {
+        this.service = service;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Team> findById(@PathVariable Long id) {
         Optional<Team> team = service.findById(id);
 
-        if(team.isPresent()) {
-            return ResponseEntity
+        return team.map(value -> ResponseEntity
                 .ok()
-                .body(team.get());
-        }
+                .body(value)).orElseGet(() -> ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build());
 
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .build();
     }
 
     @PostMapping
