@@ -38,9 +38,9 @@ public class TeamRepositoryTest {
     }
 
     @Test
-    public void givenFindById_whenTeamDoesExists_thenReturnNotFoundStatus() {
+    public void givenFindById_whenTeamDoesNotExists_thenReturnEmpty() {
         // Act
-        Optional<Team> actual = repository.findById(10L);
+        Optional<Team> actual = repository.findById(1000L);
 
         // Assert
         assertTrue(actual.isEmpty());

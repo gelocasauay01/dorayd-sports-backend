@@ -24,7 +24,7 @@ import com.dorayd.sports.features.user.models.User;
 @SpringBootTest
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class AuthenticationServiceIntegrationTest {
+public class AuthenticationServiceTest {
     
     @Autowired
     AuthenticationService service;

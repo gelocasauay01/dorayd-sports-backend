@@ -21,7 +21,7 @@ import com.dorayd.sports.features.user.models.User;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class TeamServiceIntegrationTest {
+public class TeamServiceTest {
     
     @Autowired
     private TeamService service;

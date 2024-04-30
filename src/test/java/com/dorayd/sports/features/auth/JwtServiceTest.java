@@ -16,6 +16,7 @@ import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.services.JwtService;
 import com.dorayd.sports.features.user.models.Gender;
 import com.dorayd.sports.features.user.models.User;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -28,7 +29,7 @@ public class JwtServiceTest {
     @Test
     public void givenGenerateToken_whenGivenUserDetails_generateJsonWebToken() {
         // Arrange
-        User user = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User user = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         UserAuth auth = new UserAuth("abc123", "password1", Role.USER, user);
         Date issueDate = new Date(100);
         Date expirationDate =  new Date(1000);
@@ -75,7 +76,7 @@ public class JwtServiceTest {
     @Test
     public void givenIsValid_whenTokenIsExpired_thenThrowExpiredJwtException() {
         // Arrange
-        User user = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User user = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         UserAuth auth = new UserAuth("abc123", "password1", Role.USER, user);
         String token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhYmMxMjMiLCJpYXQiOjAsImV4cCI6MX0.g8Vk2UNcKNF7JJQPV7o5Posx60-62AeHalAPHCSL68Es0olet_2A0OgsSCmG94Vu";
 

@@ -38,9 +38,9 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void givenFindById_whenUserDoesExists_thenReturnNotFoundStatus() {
+    public void givenFindById_whenUserDoesNotExists_thenReturnNotFoundStatus() {
         // Act
-        Optional<User> actual = repository.findById(10L);
+        Optional<User> actual = repository.findById(10000L);
 
         // Assert
         assertTrue(actual.isEmpty());

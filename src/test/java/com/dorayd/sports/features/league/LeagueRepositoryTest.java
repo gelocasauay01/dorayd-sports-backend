@@ -37,9 +37,9 @@ public class LeagueRepositoryTest {
     }
 
     @Test
-    public void givenFindById_whenLeagueDoesExists_thenReturnNotFoundStatus() {
+    public void givenFindById_whenLeagueDoesExists_thenReturnEmpty() {
         // Act
-        Optional<League> actual = repository.findById(10L);
+        Optional<League> actual = repository.findById(10000L);
 
         // Assert
         assertTrue(actual.isEmpty());
