@@ -22,18 +22,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 public class LeagueControllerTest extends IntegrationTestWithAuthentication{
-    private final int DELETE_ID = 3;
 
     @Test
-    @DisplayName("GET /league/1 - Found")
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
         // Arrange
-        String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\"}";
+        final String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\"}";
+        final int findId = 1;
 
-        // Act 
-        // Refer to data-test.sql to know the values of each IDs
-        int FIND_ID = 1;
-        MvcResult result = mockMvc.perform(get("/api/league/{id}", FIND_ID).with(user(userDetails))).andReturn();
+        // Act
+        final MvcResult result = mockMvc.perform(get("/api/league/{id}", findId).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -42,20 +39,18 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
-    @DisplayName("GET /league/1 - Not Found")
     public void givenFindById_whenLeagueDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         // Act 
-        MvcResult result = mockMvc.perform(get("/api/league/{id}", 100).with(user(userDetails))).andReturn();
+        final MvcResult result = mockMvc.perform(get("/api/league/{id}", 100).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
     }
 
-    @Test   
-    @DisplayName("POST /league - CREATED")
+    @Test
     public void givenCreate_whenLeagueIsValid_thenReturnCreatedLeague() throws Exception {
         // Act
-        MvcResult result = mockMvc.perform(post("/api/league")
+        final MvcResult result = mockMvc.perform(post("/api/league")
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content( "{\"id\": null,\"title\":\"Greenpark Summer League\"}")).andReturn();
@@ -67,14 +62,13 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
-    @DisplayName("PUT /league/{id} - OK")
     public void givenUpdate_whenLeagueAndIdExists_thenUpdateAndReturnUpdatedLeague() throws Exception {
         // Arrange
-        int UPDATE_ID = 2;
-        String expectedJson = String.format("{\"id\":%d,\"title\":\"Karangalan League\"}", UPDATE_ID);
+        final int updateId = 2;
+        final String expectedJson = String.format("{\"id\":%d,\"title\":\"Karangalan League\"}", updateId);
 
         //Act
-        MvcResult result = mockMvc.perform(put("/api/league/{id}", UPDATE_ID)
+        final MvcResult result = mockMvc.perform(put("/api/league/{id}", updateId)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"id\": null,\"title\":\"Karangalan League\"}")).andReturn();
@@ -86,20 +80,24 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
-    @DisplayName("DELETE /league/{id} - OK")
     public void givenDelete_whenLeagueWithIdExists_thenDeleteLeague() throws Exception {
+        // Arrange
+        final int deleteId = 3;
+
         // Act
-        MvcResult result = mockMvc.perform(delete("/api/league/{id}", DELETE_ID).with(user(userDetails))).andReturn();
+        final MvcResult result = mockMvc.perform(delete("/api/league/{id}", deleteId).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
     }
 
     @Test
-    @DisplayName("DELETE /league/{id} - NOT FOUND")
     public void givenDelete_whenLeagueWithIdDoesNotExists_thenThrowNotFound() throws Exception {
+        // Arrange
+        final int invalidDeleteId = 10000;
+
         // Act
-        MvcResult result = mockMvc.perform(delete("/api/league/{id}", 1000).with(user(userDetails))).andReturn();
+        final MvcResult result = mockMvc.perform(delete("/api/league/{id}", invalidDeleteId).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());

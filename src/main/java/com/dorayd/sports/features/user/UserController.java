@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,26 +25,26 @@ import com.dorayd.sports.features.user.services.UserService;
 public class UserController {
     public static final String USER_API_URL = "/api/user";
 
-    @Autowired
-    private UserService service;
+    private final UserService service;
+
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         Optional<User> user = service.findById(id);
 
-        if(user.isPresent()) {
-            return ResponseEntity
+        return user.map(value -> ResponseEntity
                 .ok()
-                .body(user.get());
-        }
+                .body(value)).orElseGet(() -> ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build());
 
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .build();
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User newUser) {
+    public ResponseEntity<User> create(@Valid @RequestBody User newUser) {
         User createdUser = service.create(newUser);
         try {
             return ResponseEntity
@@ -57,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
         return ResponseEntity
             .ok()
             .body(service.update(id, updatedUser));

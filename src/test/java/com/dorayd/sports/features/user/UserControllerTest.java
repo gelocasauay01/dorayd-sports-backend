@@ -23,15 +23,13 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 public class UserControllerTest extends IntegrationTestWithAuthentication{
 
     @Test
-    @DisplayName("GET /user/1 - Found")
     public void givenFindById_whenUserExists_thenReturnSpecificUser() throws Exception {
         // Arrange
-        String expectedJson = "{\"id\":1,\"firstName\":\"Joseph\",\"middleName\":\"Mardo\",\"lastName\":\"Casauay\",\"birthDate\":\"1999-08-01\",\"gender\":\"MALE\"}";
+        final String expectedJson = "{\"id\":1,\"firstName\":\"Joseph\",\"middleName\":\"Mardo\",\"lastName\":\"Casauay\",\"birthDate\":\"1999-08-01\",\"gender\":\"MALE\"}";
+        int findId = 1;
 
-        // Act 
-        // Refer to data-test.sql to know the values of each IDs
-        int FIND_ID = 1;
-        MvcResult result = mockMvc.perform(get("/api/user/{id}", FIND_ID).with(user(userDetails))).andReturn();
+        // Act
+        final MvcResult result = mockMvc.perform(get("/api/user/{id}", findId).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -40,7 +38,6 @@ public class UserControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
-    @DisplayName("GET /user/1 - Not Found")
     public void givenFindById_whenUserDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         // Act 
         MvcResult result = mockMvc.perform(get("/api/user/{id}", 100).with(user(userDetails))).andReturn();
@@ -50,11 +47,12 @@ public class UserControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
-    @DisplayName("POST /user - CREATED")
     public void givenCreate_whenUserIsValid_thenReturnCreatedUser() throws Exception {
+        // Arrange
+        final String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
+
         // Act
-        String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
-        MvcResult result = mockMvc.perform(post("/api/user")
+        final MvcResult result = mockMvc.perform(post("/api/user")
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content(expected)).andReturn();
@@ -69,11 +67,11 @@ public class UserControllerTest extends IntegrationTestWithAuthentication{
     @DisplayName("PUT /user/{id} - OK")
     public void givenUpdate_whenUserAndIdExists_thenUpdateAndReturnUpdatedUser() throws Exception {
         // Arrange
-        int UPDATE_ID = 2;
-        String expected = String.format("{\"id\":%d,\"firstName\":\"Reynald\",\"middleName\":null,\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}", UPDATE_ID);
+        final int updateId = 2;
+        final String expected = String.format("{\"id\":%d,\"firstName\":\"Reynald\",\"middleName\":null,\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}", updateId);
 
         //Act
-        MvcResult result = mockMvc.perform(put("/api/user/{id}", UPDATE_ID)
+        final MvcResult result = mockMvc.perform(put("/api/user/{id}", updateId)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content(expected)).andReturn();
@@ -85,14 +83,97 @@ public class UserControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
-    @DisplayName("DELETE /user/{id} - OK")
     public void givenDelete_whenUserWithIdExists_thenDeleteUser() throws Exception {
+        // Arrange
+        final int deleteId = 3;
 
         // Act
-        int DELETE_ID = 3;
-        MvcResult result = mockMvc.perform(delete("/api/user/{id}", DELETE_ID).with(user(userDetails))).andReturn();
+        final MvcResult result = mockMvc.perform(delete("/api/user/{id}", deleteId).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+    }
+
+    @Test
+    public void givenCreate_whenInvalidNamesAreGiven_thenThrowBadRequestStatus() throws Exception {
+        // Arrange
+        final String expected = "{\"firstName\":null,\"middleName\":\"sldjfwdkjfwdlvbdjvabdvbdkjvlsdbvljadsbvskdjlvbsdajklvbsdjkvbsdvbaekvwbeiuvwevdvbsdvbluiwevbwevjbwvjklsdbviuwevbwjvbdslvjbiewuvbwejvbsdvlkaebviwdsvjsbdvilewabiwvjsdeouiwvbwdjvbsuiaebvwjkebvsdiuvbwejvbweouvisdvjwabd\",\"lastName\":\"B\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
+
+        // Act
+        final MvcResult result = mockMvc.perform(post("/api/user")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(expected)).andReturn();
+
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("First name must not be null"));
+        assertTrue(result.getResponse().getContentAsString().contains("Middle name must have 3-100 characters"));
+        assertTrue(result.getResponse().getContentAsString().contains("Last name must have 3-100 characters"));
+    }
+
+    @Test
+    public void givenCreate_whenGenderIsNull_thenThrowBadRequestStatus() throws Exception {
+        // Arrange
+        final String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":null}";
+
+        // Act
+        final MvcResult result = mockMvc.perform(post("/api/user")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(expected)).andReturn();
+
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Gender must not be null"));
+    }
+
+    @Test
+    public void givenCreate_whenGenderIsNotInTheList_thenThrowBadRequestStatus() throws Exception {
+        // Arrange
+        final String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":null}";
+
+        // Act
+        final MvcResult result = mockMvc.perform(post("/api/user")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(expected)).andReturn();
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+    }
+
+    @Test
+    public void givenCreate_whenBirthDateIsInTheFuture_thenThrowBadRequestStatus() throws Exception {
+        //Arrange
+        final String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"3000-08-01\",\"gender\":\"NON_BINARY\"}";
+
+        // Act
+        final MvcResult result = mockMvc.perform(post("/api/user")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(expected)).andReturn();
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Birth date must be in the past"));
+    }
+
+    @Test
+    public void givenCreate_whenBirthDateIsNull_thenThrowBadRequestStatus() throws Exception {
+        //Arrange
+        final String expected = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":null,\"gender\":\"NON_BINARY\"}";
+
+        // Act
+        final MvcResult result = mockMvc.perform(post("/api/user")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(expected)).andReturn();
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Birth date must not be null"));
     }
 }

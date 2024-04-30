@@ -24,3 +24,11 @@ CREATE TABLE IF NOT EXISTS user_auth (
     user_id INT NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS user_team_memberships (
+    user_id INTEGER NOT NULL,
+    team_id INTEGER NOT NULL,
+    PRIMARY KEY(user_id, team_id),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_team FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
+);

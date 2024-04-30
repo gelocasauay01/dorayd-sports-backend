@@ -82,7 +82,6 @@ public class AuthenticationControllerTest {
     }   
     
     @Test
-    @DisplayName("POST /auth/register -  CREATED")
     public void givenRegister_whenUsernameDoesNotExist_thenReturnAuthenticationResponse() throws Exception {
         //Act
         MvcResult result = mockMvc.perform(post("/api/auth/register")
@@ -96,7 +95,6 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    @DisplayName("POST /auth/register -  CONFLICT")
     public void givenRegister_whenUsernameExists_thenReturnConflictStatusCode() throws Exception {
         //Act
         MvcResult result = mockMvc.perform(post("/api/auth/register")
@@ -108,7 +106,6 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    @DisplayName("POST /auth/login - OK")
     public void givenLogin_whenUserExistsAndCorrectCredentials_thenReturnAuthenticationResponse() throws Exception {
         //Act
         MvcResult result = mockMvc.perform(post("/api/auth/login")
@@ -120,7 +117,6 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    @DisplayName("POST /auth/login - UNAUTHORIZED")
     public void givenLogin_whenUserExistsAndCorrectCredentials_thenReturnUnauthorizedStatusCode() throws Exception {
         //Act
         MvcResult result = mockMvc.perform(post("/api/auth/login")
