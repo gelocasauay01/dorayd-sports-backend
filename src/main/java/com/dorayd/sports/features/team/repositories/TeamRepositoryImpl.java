@@ -102,7 +102,7 @@ public class TeamRepositoryImpl implements TeamRepository{
     private void insertUserMembership(List<User> users, Long teamId) {
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> parameters[] = (Map<String, Object>[]) new Map[users.size()];
+        Map<String, Object>[] parameters = (Map<String, Object>[]) new Map[users.size()];
 
         for(int index = 0; index < users.size(); index++) {
             parameters[index] = createTeamMembershipParameters(teamId, users.get(index).getId());

@@ -1,16 +1,14 @@
 package com.dorayd.sports.features.team.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
 import com.dorayd.sports.features.user.models.User;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Team {
     private Long id;
     private String name;
@@ -21,7 +19,7 @@ public class Team {
         return String.format("""
             team:
                 id: %d
-                name: %s    
+                name: %s
                 players: %s
         """, id, name, players);
     }

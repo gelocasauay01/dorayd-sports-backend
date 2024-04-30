@@ -3,6 +3,7 @@ package com.dorayd.sports.features.auth.models;
 import java.util.Collection;
 import java.util.List;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,12 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.dorayd.sports.features.user.models.User;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class UserAuth implements UserDetails{
     private String username;
     private String password;

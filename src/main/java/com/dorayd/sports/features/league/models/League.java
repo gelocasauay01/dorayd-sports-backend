@@ -1,12 +1,10 @@
 package com.dorayd.sports.features.league.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class League {
     private Long id;
     private String title;

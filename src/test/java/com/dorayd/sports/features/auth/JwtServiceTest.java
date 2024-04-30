@@ -16,7 +16,6 @@ import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.services.JwtService;
 import com.dorayd.sports.features.user.models.Gender;
 import com.dorayd.sports.features.user.models.User;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest

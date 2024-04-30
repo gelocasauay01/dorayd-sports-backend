@@ -11,12 +11,10 @@ import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
 import com.dorayd.sports.features.user.models.Gender;
 import com.dorayd.sports.features.user.models.User;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.LocalDate;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -46,7 +44,7 @@ public class UserAuthRepositoryTest {
         Optional<UserAuth> actual = repository.findByUsername("testuser");
 
         // Assert
-        assertTrue(!actual.isPresent());
+        assertTrue(actual.isEmpty());
     }
 
     @Test 
@@ -66,7 +64,7 @@ public class UserAuthRepositoryTest {
     @Test 
     public void givenSave_whenUserAuthIsValidAndUserExist_thenReturnCreatedUserAuth() {
         // Arrange
-        User expectedUser = new User(4l, "Hayley", "Mark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
+        User expectedUser = new User(4L, "Hayley", "Mark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
         UserAuth expectedUserAuth = new UserAuth("asdf123436346", "password890", Role.USER, expectedUser);
 
         // Act
@@ -84,7 +82,7 @@ public class UserAuthRepositoryTest {
 
         // Act
         boolean isUpdated = repository.updatePassword(expected, username);
-        UserAuth userAuth = repository.findByUsername(username).get();
+        UserAuth userAuth = repository.findByUsername(username).orElseThrow();
 
         // Assert
         assertTrue(isUpdated);
@@ -101,11 +99,8 @@ public class UserAuthRepositoryTest {
         boolean isUpdated = repository.updatePassword(expected, username);
 
         // Assert
-        assertTrue(!isUpdated);
+        assertFalse(isUpdated);
     }
-
-
-    @Test
 
     private boolean isUserAuthEqual(UserAuth a, UserAuth b) {
         return a.getUsername().equals(b.getUsername())
