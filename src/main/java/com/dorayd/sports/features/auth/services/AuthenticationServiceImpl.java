@@ -2,6 +2,8 @@ package com.dorayd.sports.features.auth.services;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,22 +15,14 @@ import com.dorayd.sports.features.auth.models.AuthenticationResponse;
 import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
 
+@Slf4j
+@AllArgsConstructor
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
-
     private final UserAuthRepository userAuthRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
-    public AuthenticationServiceImpl(UserAuthRepository userAuthRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
-        this.userAuthRepository = userAuthRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-    }
-
-    private static final Logger LOG = LogManager.getLogger(AuthenticationServiceImpl.class);
 
     @Override
     public AuthenticationResponse register(UserAuth newUserAuth) {
@@ -38,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
         UserAuth registeredUserAuth = userAuthRepository.create(newUserAuth);
 
-        LOG.info("Successfully registered user: {}", registeredUserAuth.getUsername());
+        log.info("Successfully registered user: {}", registeredUserAuth.getUsername());
         
         return new AuthenticationResponse(registeredUserAuth.getUser(), generateTokenWithNowIssueDateAndTomorrowExpiration(registeredUserAuth));
     }
@@ -51,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         );
         authenticationManager.authenticate(authentication);
 
-        LOG.info("Successfully authenticated user: {}", userAuthFromRequest.getUsername());
+        log.info("Successfully authenticated user: {}", userAuthFromRequest.getUsername());
 
         UserAuth userAuth = userAuthRepository.findByUsername(userAuthFromRequest.getUsername()).get();
         return new AuthenticationResponse(userAuth.getUser(),  generateTokenWithNowIssueDateAndTomorrowExpiration(userAuth));

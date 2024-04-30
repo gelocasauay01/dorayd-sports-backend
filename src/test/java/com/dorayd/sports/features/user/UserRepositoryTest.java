@@ -34,7 +34,7 @@ public class UserRepositoryTest {
 
         // Assert
         assertTrue(actual.isPresent());
-        assertTrue(UserTestHelper.isUserEqual(expected, actual.get()));
+        assertEquals(expected, actual.get());
     }
 
     @Test
@@ -57,35 +57,35 @@ public class UserRepositoryTest {
         // Assert 
         assertNotNull(actual.getId());
         assertTrue(actual.getId().compareTo(0L) > 0);
-        assertTrue(UserTestHelper.isUserEqual(input, actual));
+        assertEquals(input, actual);
     }
 
     @Test
     public void givenUpdate_whenUserExists_thenUpdateUserAndReturn() {
         // Arrange
         User update = new User(null, "Jones", "Hayley", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        Long id = 2L;
+        Long updateId = 2L;
 
         // Act
-        User actual = repository.update(id, update);
+        User actual = repository.update(updateId, update);
         Optional<User> queriedAActual = repository.findById(actual.getId());
 
         // Assert
-        assertEquals(id, actual.getId());
-        assertTrue(UserTestHelper.isUserEqual(update, actual));
+        assertEquals(updateId, actual.getId());
+        assertEquals(update, actual);
         assertTrue(queriedAActual.isPresent());
-        assertEquals(id, queriedAActual.get().getId());
-        assertTrue(UserTestHelper.isUserEqual(update, queriedAActual.get()));
+        assertEquals(updateId, queriedAActual.get().getId());
+        assertEquals(update, queriedAActual.get());
     }
 
     @Test
     public void givenDelete_whenUserExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4L;
+        final long deleteId = 4L;
 
         // Act 
-        boolean isDeleted = repository.delete(DELETE_ID);
-        Optional<User> queried = repository.findById(DELETE_ID);
+        boolean isDeleted = repository.delete(deleteId);
+        Optional<User> queried = repository.findById(deleteId);
 
         // Assert
         assertTrue(isDeleted);

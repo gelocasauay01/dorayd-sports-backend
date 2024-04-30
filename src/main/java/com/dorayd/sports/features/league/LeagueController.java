@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.league;
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,16 +20,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(LeagueController.LEAGUE_API_URL)
 public class LeagueController {
     public static final String LEAGUE_API_URL = "/api/league";
 
     private final LeagueService service;
-
-    public LeagueController(LeagueService service) {
-        this.service = service;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<League> findById(@PathVariable Long id) {

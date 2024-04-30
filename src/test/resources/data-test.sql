@@ -1,6 +1,9 @@
 INSERT INTO leagues(title) VALUES('Greenpark league');
 INSERT INTO leagues(title) VALUES('Pokemon league');
 INSERT INTO leagues(title) VALUES('Karate Tournament');
+INSERT INTO leagues(title) VALUES('Vista league');
+INSERT INTO leagues(title) VALUES('Creators league');
+INSERT INTO leagues(title) VALUES('Taekwondo Tournament');
 
 INSERT INTO teams(name) VALUES('Team Rocket');
 INSERT INTO teams(name) VALUES('OG');

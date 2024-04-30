@@ -34,7 +34,7 @@ public class TeamRepositoryTest {
 
         // Assert
         assertTrue(actual.isPresent());
-        assertEquals(expected.getId(), actual.get().getId());
+        assertEquals(expected, actual.get());
     }
 
     @Test
@@ -57,8 +57,7 @@ public class TeamRepositoryTest {
         // Assert 
         assertNotNull(actual.getId());
         assertTrue(actual.getId().compareTo(0L) > 0);
-        assertEquals(input.getName(), actual.getName());
-        assertTrue(input.getPlayers().isEmpty());
+        assertEquals(input, actual);
     }
 
     @Test
@@ -73,20 +72,20 @@ public class TeamRepositoryTest {
 
         // Assert
         assertEquals(id, actual.getId());
-        assertEquals(update.getName(), actual.getName());
+        assertEquals(update, actual);
         assertTrue(queriedAActual.isPresent());
         assertEquals(id, queriedAActual.get().getId());
-        assertEquals(update.getName(), queriedAActual.get().getName());
+        assertEquals(update, queriedAActual.get());
     }
 
     @Test
     public void givenDelete_whenTeamExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4L;
+        final long deleteId = 4L;
 
         // Act 
-        boolean isDeleted = repository.delete(DELETE_ID);
-        Optional<Team> queried = repository.findById(DELETE_ID);
+        boolean isDeleted = repository.delete(deleteId);
+        Optional<Team> queried = repository.findById(deleteId);
 
         // Assert
         assertTrue(isDeleted);

@@ -12,6 +12,7 @@ import lombok.*;
 @Data
 public class User {
 
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotNull(message = "First name must not be null")
@@ -31,17 +32,4 @@ public class User {
 
     @NotNull(message = "Gender must not be null")
     private Gender gender;
-
-    @Override
-    public String toString() {
-        return String.format("""
-            user:
-                id: %d
-                firstName: %s
-                middleName: %s
-                lastName: %s
-                birthDate: %s
-                gender: %s
-        """, id, firstName, middleName, lastName, birthDate, gender);
-    }
 }

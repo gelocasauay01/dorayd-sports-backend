@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.team;
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,16 +21,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(TeamController.TEAM_API_URL)
 public class TeamController {
     public static final String TEAM_API_URL = "/api/team";
 
     private final TeamService service;
-
-    public TeamController(TeamService service) {
-        this.service = service;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Team> findById(@PathVariable Long id) {

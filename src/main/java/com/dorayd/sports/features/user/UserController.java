@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,16 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dorayd.sports.features.user.models.User;
 import com.dorayd.sports.features.user.services.UserService;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(UserController.USER_API_URL)
 public class UserController {
     public static final String USER_API_URL = "/api/user";
 
     private final UserService service;
-
-    public UserController(UserService service) {
-        this.service = service;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {

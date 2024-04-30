@@ -24,7 +24,7 @@ public class TeamRepositoryImpl implements TeamRepository{
     private final SimpleJdbcInsert teamSimpleJdbcInsert;
     private final SimpleJdbcInsert membershipSimpleJdbcInsert;
 
-    public TeamRepositoryImpl(JdbcTemplate jdbcTemplate, UserRepository userRepository) {
+    public TeamRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.teamSimpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate)
             .withTableName("teams")

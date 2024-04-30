@@ -37,7 +37,7 @@ public class TeamServiceTest {
 
         // Assert
         assertEquals(teamId, actual.getId());
-        assertTrue(TeamTestHelper.isUserInTeam(expectedUser, actual));
+        assertTrue(actual.getPlayers().contains(expectedUser));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class TeamServiceTest {
 
         // Assert
         assertEquals(teamId, actual.getId());
-        assertTrue(TeamTestHelper.isUserInTeam(expectedUser, actual));
+        assertTrue(actual.getPlayers().contains(expectedUser));
     }
 
     @Test
@@ -77,6 +77,6 @@ public class TeamServiceTest {
         Team actual = service.create(expected);
 
         // Assert
-        assertTrue(TeamTestHelper.isTeamEqual(expected, actual));
+        assertEquals(expected, actual);
     }
 }

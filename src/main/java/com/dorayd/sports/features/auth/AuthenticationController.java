@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.auth;
 
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,13 @@ import com.dorayd.sports.features.auth.models.AuthenticationResponse;
 import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.services.AuthenticationService;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(AuthenticationController.AUTH_API_URL)
 public class AuthenticationController {
     public final static String AUTH_API_URL = "/api/auth";
 
     private final AuthenticationService service;
-
-    public AuthenticationController(AuthenticationService service) {
-        this.service = service;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserAuth newUserAuth) {

@@ -6,21 +6,16 @@ import lombok.Data;
 import java.util.List;
 
 import com.dorayd.sports.features.user.models.User;
+import lombok.EqualsAndHashCode;
 
 @AllArgsConstructor
 @Data
 public class Team {
+
+    @EqualsAndHashCode.Exclude
     private Long id;
     private String name;
-    private List<User> players;
 
-    @Override
-    public String toString() {
-        return String.format("""
-            team:
-                id: %d
-                name: %s
-                players: %s
-        """, id, name, players);
-    }
+    @EqualsAndHashCode.Exclude
+    private List<User> players;
 }

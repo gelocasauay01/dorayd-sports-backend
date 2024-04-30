@@ -12,6 +12,7 @@ import com.dorayd.sports.features.user.models.User;
 
 import lombok.AllArgsConstructor;
 
+// TODO: provide real logic for overridden methods
 @AllArgsConstructor
 @Data
 public class UserAuth implements UserDetails{

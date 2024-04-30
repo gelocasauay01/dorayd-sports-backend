@@ -33,7 +33,7 @@ public class LeagueRepositoryTest {
         // Assert
         assertTrue(actual.isPresent());
         assertEquals(expected.getId(), actual.get().getId());
-        assertEquals(expected.getTitle(), actual.get().getTitle());
+        assertEquals(expected, actual.get());
     }
 
     @Test
@@ -56,35 +56,35 @@ public class LeagueRepositoryTest {
         // Assert 
         assertNotNull(actual.getId());
         assertTrue(actual.getId().compareTo(0L) > 0);
-        assertEquals(input.getTitle(), actual.getTitle());
+        assertEquals(input, actual);
     }
 
     @Test
     public void givenUpdate_whenLeagueExists_thenUpdateLeagueAndReturn() {
         // Arrange
         League update = new League(null, "Tekken Tournament");
-        Long id = 2L;
+        Long updateId = 2L;
 
         // Act
-        League actual = repository.update(id, update);
+        League actual = repository.update(updateId, update);
         Optional<League> queriedAActual = repository.findById(actual.getId());
 
         // Assert
-        assertEquals(id, actual.getId());
-        assertEquals(update.getTitle(), actual.getTitle());
+        assertEquals(updateId, actual.getId());
+        assertEquals(update, actual);
         assertTrue(queriedAActual.isPresent());
-        assertEquals(id, queriedAActual.get().getId());
-        assertEquals(update.getTitle(), queriedAActual.get().getTitle());
+        assertEquals(updateId, queriedAActual.get().getId());
+        assertEquals(update, queriedAActual.get());
     }
 
     @Test
     public void givenDelete_whenLeagueExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4L;
+        final long deleteId = 4L;
 
         // Act 
-        boolean isDeleted = repository.delete(DELETE_ID);
-        Optional<League> queried = repository.findById(DELETE_ID);
+        boolean isDeleted = repository.delete(deleteId);
+        Optional<League> queried = repository.findById(deleteId);
 
         // Assert
         assertTrue(isDeleted);

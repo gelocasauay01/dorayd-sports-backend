@@ -3,6 +3,8 @@ package com.dorayd.sports.features.team.services;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -12,28 +14,22 @@ import com.dorayd.sports.features.team.repositories.TeamRepository;
 import com.dorayd.sports.features.user.models.User;
 import com.dorayd.sports.features.user.repositories.UserRepository;
 
+@Slf4j
+@AllArgsConstructor
 @Service
 public class TeamServiceImpl implements TeamService{
-
-    private static final Logger LOG = LogManager.getLogger(TeamServiceImpl.class);
-
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
-    public TeamServiceImpl(TeamRepository teamRepository, UserRepository userRepository) {
-        this.teamRepository = teamRepository;
-        this.userRepository = userRepository;
-    }
-
     @Override
     public Optional<Team> findById(Long id) {
-        LOG.info("Finding Team with id: {}", id);
+        log.info("Finding Team with id: {}", id);
         return teamRepository.findById(id);
     }
 
     @Override
     public Team create(Team newTeam) {
-        LOG.info("Saving team to the database: {}", newTeam);
+        log.info("Saving team to the database: {}", newTeam);
 
         if(newTeam.getPlayers() != null && !newTeam.getPlayers().isEmpty()) {
             savePlayers(newTeam.getPlayers());
@@ -44,19 +40,19 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public Team update(Long id, Team updatedTeam) {
-        LOG.info("Updating team with id {} with {}", id, updatedTeam);
+        log.info("Updating team with id {} with {}", id, updatedTeam);
         return teamRepository.update(id, updatedTeam);
     }
 
     @Override
     public boolean delete(Long id) {
-        LOG.info("Deleting team with id {}", id);
+        log.info("Deleting team with id {}", id);
         return teamRepository.delete(id);
     }
 
     @Override
     public Team addPlayer(User user, Long teamId) {
-        LOG.info("Adding user: {} in team with id {}", user, teamId);
+        log.info("Adding user: {} in team with id {}", user, teamId);
 
         // Save user when it still does not exist
         if(user.getId() == null) {

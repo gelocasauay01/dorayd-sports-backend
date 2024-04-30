@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,12 +17,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+@Slf4j
 @Service
 public class JwtServiceImpl implements JwtService{
-    // TODO: Move to application.yaml
-    private final String SECRET_KEY = "f79008cdcb8f6f4c059c248752ff64c97fe5a7a3fe50dd37f1aa2f4b023fa26e";
 
-    private static final Logger LOG = LogManager.getLogger(JwtServiceImpl.class);
+    // TODO: Move to application.yaml
+    private static final String SECRET_KEY = "f79008cdcb8f6f4c059c248752ff64c97fe5a7a3fe50dd37f1aa2f4b023fa26e";
+
 
     @Override
     public String generateToken(UserDetails userDetails, Date issueDate, Date expirationDate) {
@@ -32,7 +34,7 @@ public class JwtServiceImpl implements JwtService{
             .expiration(expirationDate)
             .signWith(getSignInKey())
             .compact();
-        LOG.info("JWT generated: {}", token);
+        log.info("JWT generated: {}", token);
         return token;
     }
 
@@ -47,7 +49,7 @@ public class JwtServiceImpl implements JwtService{
             String username = extractUsername(token);
             return username.equals(userDetails.getUsername());
         } catch(ExpiredJwtException e) {
-            LOG.warn("JWT is expired: {}", e.getMessage());
+            log.warn("JWT is expired: {}", e.getMessage());
             return false;
         }
         
