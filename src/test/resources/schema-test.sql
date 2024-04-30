@@ -32,3 +32,11 @@ CREATE TABLE IF NOT EXISTS user_team_memberships (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS team_league_memberships (
+    team_id INTEGER NOT NULL,
+    league_id INTEGER NOT NULL,
+    PRIMARY KEY(team_id, league_id),
+    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE,
+    FOREIGN KEY(league_id) REFERENCES leagues(id) ON DELETE CASCADE
+);

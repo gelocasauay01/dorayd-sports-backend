@@ -42,5 +42,12 @@ public interface TeamRepository {
      */
     boolean delete(Long id);
 
-    Team addPlayer(User user, Long teamId);
+    /**
+     * Adds a player to a team.
+     *
+     * @param userId The ID of the user to be added to the team.
+     * @param teamId The ID of the team.
+     * @return The updated team.
+     */
+    Team addPlayer(Long userId, Long teamId);
 }

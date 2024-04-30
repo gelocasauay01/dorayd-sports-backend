@@ -1,5 +1,6 @@
 package com.dorayd.sports.core.validations;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.ErrorResponse;
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
         return ErrorResponse
                 .builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage())
                 .build();
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ProblemDetail handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

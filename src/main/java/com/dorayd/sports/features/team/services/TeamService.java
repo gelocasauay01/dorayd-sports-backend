@@ -42,5 +42,12 @@ public interface TeamService {
      */
     boolean delete(Long id);
 
+    /**
+     * Adds a player to a team.
+     *
+     * @param user The user to be added to the team.
+     * @param teamId The ID of the team.
+     * @return The updated team.
+     */
     Team addPlayer(User user, Long teamId);
 }

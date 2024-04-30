@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.league;
 
+import com.dorayd.sports.features.team.models.Team;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class LeagueController {
 
     @GetMapping("/{id}")
     public ResponseEntity<League> findById(@PathVariable Long id) {
-        Optional<League> league = service.findById(id);
+        final Optional<League> league = service.findById(id);
 
         return league.map(value -> ResponseEntity
                 .ok()
@@ -42,7 +43,7 @@ public class LeagueController {
 
     @PostMapping
     public ResponseEntity<League> create(@RequestBody League newLeague) {
-        League createdLeague = service.create(newLeague);
+        final League createdLeague = service.create(newLeague);
         try {
             return ResponseEntity
                 .created(new URI(String.format("%s/%d", LEAGUE_API_URL, createdLeague.getId())))
@@ -72,6 +73,13 @@ public class LeagueController {
                 .status(HttpStatus.NOT_FOUND)
                 .build();
         }
+    }
+
+    @PostMapping("/{leagueId}/add_team")
+    public ResponseEntity<League> addTeam(@PathVariable Long leagueId, @RequestBody Team newTeam) {
+        return ResponseEntity
+                .ok()
+                .body(service.addTeam(newTeam, leagueId));
     }
     
 }

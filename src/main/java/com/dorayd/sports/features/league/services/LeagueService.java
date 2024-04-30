@@ -3,6 +3,7 @@ package com.dorayd.sports.features.league.services;
 import java.util.Optional;
 
 import com.dorayd.sports.features.league.models.League;
+import com.dorayd.sports.features.team.models.Team;
 
 /**
  * This interface represents the service for managing leagues.
@@ -41,4 +42,13 @@ public interface LeagueService {
      * @return A boolean indicating whether the deletion was successful.
      */
     boolean delete(Long id);
+
+    /**
+     * Adds a team to a league.
+     *
+     * @param team The team to be added to the league.
+     * @param leagueId The ID of the league.
+     * @return The updated league.
+     */
+    League addTeam(Team team, Long leagueId);
 }

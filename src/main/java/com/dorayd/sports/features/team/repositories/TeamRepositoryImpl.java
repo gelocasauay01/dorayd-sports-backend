@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.dorayd.sports.features.team.mappers.TeamMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -63,40 +64,35 @@ public class TeamRepositoryImpl implements TeamRepository{
 
     @Override
     public Team update(Long id, Team updatedTeam) {
-        String UPDATE_BY_ID_QUERY = "UPDATE teams SET name = ? WHERE id = ?";
+        final String UPDATE_BY_ID_QUERY = "UPDATE teams SET name = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedTeam.getName(), id);
-        updatedTeam.setId(id);
-        return updatedTeam;
+        return findById(id).orElseThrow();
     }
 
     @Override
     public boolean delete(Long id) {
-        String DELETE_BY_ID_QUERY = "DELETE FROM teams WHERE id = ?";
+        final String DELETE_BY_ID_QUERY = "DELETE FROM teams WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }
 
     @Override
-    public Team addPlayer(User user, Long teamId) {
-        membershipSimpleJdbcInsert.execute(createTeamMembershipParameters(teamId, user.getId()));
+    public Team addPlayer(Long userId, Long teamId) {
+        membershipSimpleJdbcInsert.execute(createTeamMembershipParameters(teamId, userId));
         return findById(teamId).orElseThrow();
     }
 
     private Team getTeam(Long teamId) {
-        String FIND_BY_ID_QUERY = "SELECT * FROM teams WHERE id = ?";
+        final String FIND_BY_ID_QUERY = "SELECT * FROM teams WHERE id = ?";
         return jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
-            (rs, rowNum) -> new Team(
-                rs.getLong("id"),
-                rs.getString("name"),
-                Collections.emptyList()
-            ),
+            new TeamMapper(),
             teamId
         );
     }
 
-    private List<User> getTeamPlayers(Long id) {
-        String GET_ALL_PLAYER_ID = "SELECT * FROM user_team_memberships AS utm JOIN users AS u ON utm.user_id = u.id WHERE utm.team_id = ?";
-        return jdbcTemplate.query(GET_ALL_PLAYER_ID, new UserMapper(), id);
+    private List<User> getTeamPlayers(Long teamId) {
+        final String GET_ALL_PLAYER_BY_TEAM_ID = "SELECT * FROM user_team_memberships AS utm JOIN users AS u ON utm.user_id = u.id WHERE utm.team_id = ?";
+        return jdbcTemplate.query(GET_ALL_PLAYER_BY_TEAM_ID, new UserMapper(), teamId);
     }
 
     private void insertUserMembership(List<User> users, Long teamId) {

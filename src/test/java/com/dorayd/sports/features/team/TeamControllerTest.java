@@ -92,15 +92,19 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
 
     @Test
     public void givenAddPlayer_whenPlayerIsValid_thenAddPlayerToTheTeam() throws Exception {
+        //Arrange
+        final String requestBody = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
+        final long addId = 5L;
+
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/team/{id}/add_player", UPDATE_ID)
+        final MvcResult result = mockMvc.perform(post("/api/team/{id}/add_player", addId)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}")).andReturn();
+            .content(requestBody)).andReturn();
         
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
         assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
-        assertTrue(result.getResponse().getContentAsString().contains("OG"));
+        assertTrue(result.getResponse().getContentAsString().contains("EG"));
     }
 }

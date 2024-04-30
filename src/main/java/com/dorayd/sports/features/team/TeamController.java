@@ -31,7 +31,7 @@ public class TeamController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Team> findById(@PathVariable Long id) {
-        Optional<Team> team = service.findById(id);
+        final Optional<Team> team = service.findById(id);
 
         return team.map(value -> ResponseEntity
                 .ok()
@@ -43,7 +43,7 @@ public class TeamController {
 
     @PostMapping
     public ResponseEntity<Team> create(@RequestBody Team newTeam) {
-        Team createdTeam = service.create(newTeam);
+        final Team createdTeam = service.create(newTeam);
         try {
             return ResponseEntity
                 .created(new URI(String.format("%s/%d", TEAM_API_URL, createdTeam.getId())))

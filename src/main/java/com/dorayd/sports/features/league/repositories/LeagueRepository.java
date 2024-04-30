@@ -41,4 +41,13 @@ public interface LeagueRepository {
      * @return A boolean indicating whether the deletion was successful.
      */
     boolean delete(Long id);
+
+    /**
+     * Adds a team to a league.
+     *
+     * @param teamId The ID of the team to add.
+     * @param leagueId The ID of the league where the team will be added.
+     * @return The updated League.
+     */
+    League addTeam(Long teamId, Long leagueId);
 }

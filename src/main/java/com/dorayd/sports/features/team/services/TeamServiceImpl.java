@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.dorayd.sports.features.team.models.Team;
@@ -54,13 +52,12 @@ public class TeamServiceImpl implements TeamService{
     public Team addPlayer(User user, Long teamId) {
         log.info("Adding user: {} in team with id {}", user, teamId);
 
-        // Save user when it still does not exist
+        // Save user if it still does not exist
         if(user.getId() == null) {
-            User createdUser = userRepository.create(user);
-            user.setId(createdUser.getId());
+            user = userRepository.create(user);
         }
 
-        return teamRepository.addPlayer(user, teamId);
+        return teamRepository.addPlayer(user.getId(), teamId);
     }
 
     private void savePlayers(List<User> players) {
