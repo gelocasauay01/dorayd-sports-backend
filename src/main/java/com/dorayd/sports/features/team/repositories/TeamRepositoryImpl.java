@@ -1,22 +1,17 @@
 package com.dorayd.sports.features.team.repositories;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.dorayd.sports.features.team.mappers.TeamMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.user.mappers.UserMapper;
 import com.dorayd.sports.features.user.models.User;
-import com.dorayd.sports.features.user.repositories.UserRepository;
-
-import io.jsonwebtoken.lang.Collections;
 
 @Repository
 public class TeamRepositoryImpl implements TeamRepository{
@@ -78,7 +73,7 @@ public class TeamRepositoryImpl implements TeamRepository{
 
     @Override
     public Team addPlayer(Long userId, Long teamId) {
-        membershipSimpleJdbcInsert.execute(createTeamMembershipParameters(teamId, userId));
+        membershipSimpleJdbcInsert.execute(createTeamMembershipMapParam(teamId, userId));
         return findById(teamId).orElseThrow();
     }
 
@@ -96,20 +91,18 @@ public class TeamRepositoryImpl implements TeamRepository{
     }
 
     private void insertUserMembership(List<User> users, Long teamId) {
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object>[] parameters = (Map<String, Object>[]) new Map[users.size()];
-
+        MapSqlParameterSource[] parameters = new MapSqlParameterSource[users.size()];
         for(int index = 0; index < users.size(); index++) {
-            parameters[index] = createTeamMembershipParameters(teamId, users.get(index).getId());
+            User user = users.get(index);
+            parameters[index] = createTeamMembershipMapParam(teamId, user.getId());
         }
         membershipSimpleJdbcInsert.executeBatch(parameters);
     }
 
-    private Map<String, Object> createTeamMembershipParameters(Long teamId, Long userId) {
+    private MapSqlParameterSource createTeamMembershipMapParam(Long teamId, Long userId) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("team_id", teamId);
         parameters.put("user_id", userId);
-        return parameters;
+        return new MapSqlParameterSource(parameters);
     }
 }

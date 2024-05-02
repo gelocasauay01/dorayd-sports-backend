@@ -25,3 +25,12 @@ INSERT INTO users(first_name, middle_name, last_name, birth_date, gender) VALUES
 INSERT INTO user_auth(username, password, role, user_id) VALUES('abc123', '$2a$10$N35fUCHQ7/OwM4Dcw6LH8uwL8yFIJ/PnoxgAuVDJEUuNlXGANmu1G', 'USER', 1); -- decrypted password: password1
 INSERT INTO user_auth(username, password, role, user_id) VALUES('abc456', '$2a$10$8UQdI5Cx/AWe5MbIcQSQue4gB7LIgW42wrGm.6iZiG7JbAEGBJzzy', 'USER', 2); -- decrypted password: password2
 INSERT INTO user_auth(username, password, role, user_id) VALUES('abc789', '"$2a$10$mhT5RqxHGDCwO2ls3ClI0eNj82GUWTHOk3ERiUXEnSFRyPd1/Ebeu"', 'ADMIN', 3); --decryted password: password3
+
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(1, 1, 2, '2024-05-02');
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(2, 6, 3, '1985-01-11');
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(4, 5, 2, '1985-01-11');
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(4, 1, 4, '1985-01-11');
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(4, 2, 3, '1985-01-11');
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(4, 5, 3, '1985-01-11');
+INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(5, 5, 3, '1985-01-11');
+

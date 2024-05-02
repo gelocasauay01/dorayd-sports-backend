@@ -31,7 +31,7 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
     @Override
     public Optional<UserAuth> findByUsername(String username) {
         try {
-            String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE username = ?";
+            final String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE username = ?";
             UserAuth queriedUserAuth = jdbcTemplate.queryForObject(FIND_BY_USERNAME_QUERY,
                 (rs, rowNum) -> {
                     User user = new User();
@@ -45,7 +45,7 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
                 },
                 username
             );
-            queriedUserAuth.setUser(userRepository.findById(queriedUserAuth.getUser().getId()).get());
+            queriedUserAuth.setUser(userRepository.findById(queriedUserAuth.getUser().getId()).orElseThrow());
             return Optional.of(queriedUserAuth);
         } catch(EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -73,7 +73,7 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
 
     @Override
     public boolean updatePassword(String password, String username) {
-        String UPDATE_PASSWORD_BY_USERNAME_QUERY = "UPDATE user_auth SET password = ? WHERE username = ?";
+        final String UPDATE_PASSWORD_BY_USERNAME_QUERY = "UPDATE user_auth SET password = ? WHERE username = ?";
         int updatedCount = jdbcTemplate.update(UPDATE_PASSWORD_BY_USERNAME_QUERY, password, username);
         return updatedCount > 0;
     }

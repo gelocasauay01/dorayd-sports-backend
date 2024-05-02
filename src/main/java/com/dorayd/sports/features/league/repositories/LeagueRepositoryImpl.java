@@ -30,7 +30,7 @@ public class LeagueRepositoryImpl implements LeagueRepository{
     @Override
     public Optional<League> findById(Long id) {
         try {
-            final League league = getLeague(id);
+            League league = getLeague(id);
             league.setTeams(getTeams(id));
             return Optional.of(league);
         } catch(EmptyResultDataAccessException e) {
@@ -40,9 +40,9 @@ public class LeagueRepositoryImpl implements LeagueRepository{
 
     @Override
     public League create(League newLeague) {
-        final Map<String, Object> parameters = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", newLeague.getTitle());
-        final Number newId = leagueSimpleJdbcInsert.executeAndReturnKey(parameters);
+        Number newId = leagueSimpleJdbcInsert.executeAndReturnKey(parameters);
         newLeague.setId(newId.longValue());
         return newLeague;
     }
@@ -57,13 +57,13 @@ public class LeagueRepositoryImpl implements LeagueRepository{
     @Override
     public boolean delete(Long id) {
         final String DELETE_BY_ID_QUERY = "DELETE FROM leagues WHERE id = ?";
-        final int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
+        int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }
 
     @Override
     public League addTeam(Long teamId, Long leagueId) {
-        final Map<String, Object> parameters = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("team_id", teamId);
         parameters.put("league_id", leagueId);
         memberSimpleJdbcInsert.execute(parameters);
@@ -74,9 +74,9 @@ public class LeagueRepositoryImpl implements LeagueRepository{
         final String FIND_BY_ID_QUERY = "SELECT * FROM leagues WHERE id = ?";
         return jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
                 (rs, rowNum) -> new League(
-                        rs.getLong("id"),
-                        rs.getString("title"),
-                        new ArrayList<>()
+                    rs.getLong("id"),
+                    rs.getString("title"),
+                    new ArrayList<>()
                 )
                 , leagueId
         );

@@ -4,8 +4,6 @@ import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
         log.info("Successfully authenticated user: {}", userAuthFromRequest.getUsername());
 
-        UserAuth userAuth = userAuthRepository.findByUsername(userAuthFromRequest.getUsername()).get();
+        UserAuth userAuth = userAuthRepository.findByUsername(userAuthFromRequest.getUsername()).orElseThrow();
         return new AuthenticationResponse(userAuth.getUser(),  generateTokenWithNowIssueDateAndTomorrowExpiration(userAuth));
     }
 

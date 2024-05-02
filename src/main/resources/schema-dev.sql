@@ -40,3 +40,14 @@ CREATE TABLE IF NOT EXISTS team_league_memberships (
     CONSTRAINT fk_team FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_league FOREIGN KEY(league_id) REFERENCES leagues(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS games (
+    id SERIAL PRIMARY KEY,
+    league_id INTEGER NOT NULL,
+    team_a_id INTEGER NOT NULL,
+    team_b_id INTEGER NOT NULL,
+    schedule TIMESTAMP NOT NULL,
+    CONSTRAINT fk_league FOREIGN KEY(league_id) REFERENCES leagues(id) ON DELETE CASCADE,
+    CONSTRAINT fk_team_a FOREIGN KEY(team_a_id) REFERENCES teams(id) ON DELETE CASCADE,
+    CONSTRAINT fk_team_b FOREIGN KEY(team_b_id) REFERENCES teams(id) ON DELETE CASCADE
+);

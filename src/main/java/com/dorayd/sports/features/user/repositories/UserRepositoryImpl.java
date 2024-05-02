@@ -29,11 +29,12 @@ public class UserRepositoryImpl implements UserRepository{
     public Optional<User> findById(Long id) {
         try {
             String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
-            User user = jdbcTemplate.queryForObject(FIND_BY_ID_QUERY,
+            User user = jdbcTemplate.queryForObject(
+                FIND_BY_ID_QUERY,
                 new UserMapper(),
                 id
             );
-            return Optional.of(user);
+            return Optional.ofNullable(user);
         } catch(EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -54,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User update(Long id, User updatedUser) {
-        String UPDATE_BY_ID_QUERY = "UPDATE users SET first_name = ?, middle_name = ?, last_name = ?, birth_date = ?, gender = ? WHERE id = ?";
+       final String UPDATE_BY_ID_QUERY = "UPDATE users SET first_name = ?, middle_name = ?, last_name = ?, birth_date = ?, gender = ? WHERE id = ?";
         jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedUser.getFirstName(), updatedUser.getMiddleName(), updatedUser.getLastName(), updatedUser.getBirthDate().toString(), updatedUser.getGender().toString(), id);
         updatedUser.setId(id);
         return updatedUser;
@@ -62,7 +63,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public boolean delete(Long id) {
-        String DELETE_BY_ID_QUERY = "DELETE FROM users WHERE id = ?";
+        final String DELETE_BY_ID_QUERY = "DELETE FROM users WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }

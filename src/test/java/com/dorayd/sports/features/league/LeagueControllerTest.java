@@ -29,10 +29,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
         // Arrange
         String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\",\"teams\":[]}";
-        int findId = 1;
+        final int FIND_ID = 1;
 
         // Act
-        MvcResult result = mockMvc.perform(get("/api/league/{id}", findId).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/league/{id}", FIND_ID).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
