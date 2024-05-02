@@ -63,29 +63,29 @@ public class UserRepositoryTest {
     @Test
     public void givenUpdate_whenUserExists_thenUpdateUserAndReturn() {
         // Arrange
+        final Long UPDATE_ID = 2L;
         User update = new User(null, "Jones", "Hayley", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        Long updateId = 2L;
 
         // Act
-        User actual = repository.update(updateId, update);
+        User actual = repository.update(UPDATE_ID, update);
         Optional<User> queriedAActual = repository.findById(actual.getId());
 
         // Assert
-        assertEquals(updateId, actual.getId());
+        assertEquals(UPDATE_ID, actual.getId());
         assertEquals(update, actual);
         assertTrue(queriedAActual.isPresent());
-        assertEquals(updateId, queriedAActual.get().getId());
+        assertEquals(UPDATE_ID, queriedAActual.get().getId());
         assertEquals(update, queriedAActual.get());
     }
 
     @Test
     public void givenDelete_whenUserExists_thenDelete() {
         // Arrange
-        final long deleteId = 4L;
+        final long DELETE_ID = 4L;
 
         // Act 
-        boolean isDeleted = repository.delete(deleteId);
-        Optional<User> queried = repository.findById(deleteId);
+        boolean isDeleted = repository.delete(DELETE_ID);
+        Optional<User> queried = repository.findById(DELETE_ID);
 
         // Assert
         assertTrue(isDeleted);

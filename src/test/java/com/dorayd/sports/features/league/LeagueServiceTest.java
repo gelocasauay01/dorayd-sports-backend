@@ -24,11 +24,11 @@ public class LeagueServiceTest {
     @Test
     public void givenAddTeam_whenTeamExists_thenAddTeamAndReturnLeague() {
         // Arrange
-        Team expectedTeam = new Team(1L, "Team Rocket", new ArrayList<>());
-        Long leagueId = 1L;
+        final Team expectedTeam = new Team(1L, "Team Rocket", new ArrayList<>());
+        final Long leagueId = 1L;
 
         // Act
-        League actual = service.addTeam(expectedTeam, leagueId);
+        final League actual = service.addTeam(expectedTeam, leagueId);
 
         // Assert
         assertEquals(leagueId, actual.getId());
@@ -38,11 +38,11 @@ public class LeagueServiceTest {
     @Test
     public void givenAddTeam_whenTeamDoesNotExist_thenCreateTeamAndSaveMembership() {
         // Arrange
-        Team expectedTeam = new Team(null, "Team Harina", new ArrayList<>());
-        Long leagueId = 1L;
+        final Team expectedTeam = new Team(null, "Team Harina", new ArrayList<>());
+        final Long leagueId = 1L;
 
         // Act
-        League actual = service.addTeam(expectedTeam, leagueId);
+        final League actual = service.addTeam(expectedTeam, leagueId);
 
         // Assert
         assertTrue(actual.getTeams().contains(expectedTeam));

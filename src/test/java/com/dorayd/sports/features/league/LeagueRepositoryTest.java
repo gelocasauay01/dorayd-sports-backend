@@ -27,10 +27,10 @@ public class LeagueRepositoryTest {
     @Test
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() {
         // Arrange
-        League expected = new League(1L, "Greenpark league", new ArrayList<>());
+        final League expected = new League(1L, "Greenpark league", new ArrayList<>());
 
         // Act
-        Optional<League> actual = repository.findById(1L);
+        final Optional<League> actual = repository.findById(1L);
 
         // Assert
         assertTrue(actual.isPresent());
@@ -41,7 +41,7 @@ public class LeagueRepositoryTest {
     @Test
     public void givenFindById_whenLeagueDoesExists_thenReturnEmpty() {
         // Act
-        Optional<League> actual = repository.findById(10000L);
+        final Optional<League> actual = repository.findById(10000L);
 
         // Assert
         assertTrue(actual.isEmpty());
@@ -50,10 +50,10 @@ public class LeagueRepositoryTest {
     @Test 
     public void givenCreate_whenLeagueIsValid_thenReturnCreatedLeague() {
         // Arrange
-        League input = new League(null, "Digimon Battles", new ArrayList<>());
+        final League input = new League(null, "Digimon Battles", new ArrayList<>());
 
         // Act
-        League actual = repository.create(input);
+        final League actual = repository.create(input);
 
         // Assert 
         assertNotNull(actual.getId());
@@ -64,12 +64,12 @@ public class LeagueRepositoryTest {
     @Test
     public void givenUpdate_whenLeagueExists_thenUpdateLeagueAndReturn() {
         // Arrange
-        League update = new League(null, "Tekken Tournament", new ArrayList<>());
-        Long updateId = 2L;
+        final League update = new League(null, "Tekken Tournament", new ArrayList<>());
+        final Long updateId = 2L;
 
         // Act
-        League actual = repository.update(updateId, update);
-        Optional<League> queriedAActual = repository.findById(actual.getId());
+        final League actual = repository.update(updateId, update);
+        final Optional<League> queriedAActual = repository.findById(actual.getId());
 
         // Assert
         assertEquals(updateId, actual.getId());
@@ -85,8 +85,8 @@ public class LeagueRepositoryTest {
         final long deleteId = 4L;
 
         // Act 
-        boolean isDeleted = repository.delete(deleteId);
-        Optional<League> queried = repository.findById(deleteId);
+        final boolean isDeleted = repository.delete(deleteId);
+        final Optional<League> queried = repository.findById(deleteId);
 
         // Assert
         assertTrue(isDeleted);
@@ -96,10 +96,10 @@ public class LeagueRepositoryTest {
     @Test
     public void givenAddTeam_whenTeamExists_thenAddTeamAndReturnLeague() {
         // Arrange
-        Team expectedTeam = new Team(1L, "Team Rocket", new ArrayList<>());
+        final Team expectedTeam = new Team(1L, "Team Rocket", new ArrayList<>());
 
         // Act
-        League actual = repository.addTeam(expectedTeam.getId(), ADD_TEAM_ID);
+        final League actual = repository.addTeam(expectedTeam.getId(), ADD_TEAM_ID);
 
         // Assert
         assertEquals(ADD_TEAM_ID, actual.getId());
@@ -109,7 +109,7 @@ public class LeagueRepositoryTest {
     @Test
     public void givenAddTeam_whenTeamDoesNotExist_thenThrowDataIntegrityException() {
         // Arrange
-        Team expectedTeam = new Team(100000L, "Team Rocket", new ArrayList<>());
+        final Team expectedTeam = new Team(100000L, "Team Rocket", new ArrayList<>());
 
         // Act and Assert
         assertThrows(DataIntegrityViolationException.class, () -> repository.addTeam(expectedTeam.getId(), ADD_TEAM_ID));
@@ -118,8 +118,8 @@ public class LeagueRepositoryTest {
     @Test
     public void givenAddTeam_whenLeagueDoesNotExist_thenThrowDataIntegrityException() {
         // Arrange
-        Team expectedTeam = new Team(100000L, "Team Rocket", new ArrayList<>());
-        Long leagueId = 13453434L;
+        final Team expectedTeam = new Team(100000L, "Team Rocket", new ArrayList<>());
+        final Long leagueId = 13453434L;
 
         // Act and Assert
         assertThrows(DataIntegrityViolationException.class, () -> repository.addTeam(expectedTeam.getId(), leagueId));

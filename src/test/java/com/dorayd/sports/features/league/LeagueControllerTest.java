@@ -28,11 +28,11 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
         // Arrange
-        final String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\",\"teams\":[]}";
-        final int findId = 1;
+        String expectedJson = "{\"id\":1,\"title\":\"Greenpark league\",\"teams\":[]}";
+        int findId = 1;
 
         // Act
-        final MvcResult result = mockMvc.perform(get("/api/league/{id}", findId).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/league/{id}", findId).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -43,7 +43,7 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenFindById_whenLeagueDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         // Act 
-        final MvcResult result = mockMvc.perform(get("/api/league/{id}", 100).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/league/{id}", 100).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
@@ -52,7 +52,7 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenCreate_whenLeagueIsValid_thenReturnCreatedLeague() throws Exception {
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/league")
+        MvcResult result = mockMvc.perform(post("/api/league")
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content( "{\"id\": null,\"title\":\"Greenpark Summer League\"}")).andReturn();
@@ -66,10 +66,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenUpdate_whenLeagueAndIdExists_thenUpdateAndReturnUpdatedLeague() throws Exception {
         // Arrange
-        final String expectedJson = String.format("{\"id\":%d,\"title\":\"Karangalan League\",\"teams\":[]}", UPDATE_ID);
+        String expectedJson = String.format("{\"id\":%d,\"title\":\"Karangalan League\",\"teams\":[]}", UPDATE_ID);
 
         // Act
-        final MvcResult result = mockMvc.perform(put("/api/league/{id}", UPDATE_ID)
+        MvcResult result = mockMvc.perform(put("/api/league/{id}", UPDATE_ID)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"id\": null,\"title\":\"Karangalan League\"}")).andReturn();
@@ -83,10 +83,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenDelete_whenLeagueWithIdExists_thenDeleteLeague() throws Exception {
         // Arrange
-        final int deleteId = 3;
+        final int DELETE_ID = 3;
 
         // Act
-        final MvcResult result = mockMvc.perform(delete("/api/league/{id}", deleteId).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(delete("/api/league/{id}", DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -95,10 +95,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenDelete_whenLeagueWithIdDoesNotExists_thenThrowNotFound() throws Exception {
         // Arrange
-        final int invalidDeleteId = 10000;
+        final int INVALID_DELETE_ID = 10000;
 
         // Act
-        final MvcResult result = mockMvc.perform(delete("/api/league/{id}", invalidDeleteId).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(delete("/api/league/{id}", INVALID_DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
@@ -107,10 +107,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenAddTeam_whenLeagueAndTeamExists_thenReturnLeagueAndStatusOk() throws Exception {
         //Arrange
-        final String requestBody = "{\"id\":4}";
+        String requestBody = "{\"id\":4}";
 
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", ADD_TEAM_ID)
+        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", ADD_TEAM_ID)
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)).andReturn();
@@ -124,10 +124,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenAddTeam_whenLeagueDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         //Arrange
-        final String requestBody = "{\"id\":1,\"name\":\"Greenpark league\",\"players\":[]}";
+        String requestBody = "{\"id\":1,\"name\":\"Greenpark league\",\"players\":[]}";
 
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", 213213)
+        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", 213213)
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)).andReturn();
@@ -139,10 +139,10 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenAddTeam_whenLeagueExistAndTeamDoesNotExist_thenSaveTeamAndReturnUpdatedLeague() throws Exception {
         //Arrange
-        final String requestBody = "{\"id\":null,\"name\":\"Greenpark Midget\",\"players\":[]}";
+        String requestBody = "{\"id\":null,\"name\":\"Greenpark Midget\",\"players\":[]}";
 
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", ADD_TEAM_ID)
+        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", ADD_TEAM_ID)
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)).andReturn();

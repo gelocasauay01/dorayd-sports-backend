@@ -22,21 +22,21 @@ import com.dorayd.sports.features.user.models.User;
 @SpringBootTest
 @ActiveProfiles("test")
 public class TeamServiceTest {
-    
+    final Long VALID_TEAM_ID = 1L;
+
     @Autowired
     private TeamService service;
 
      @Test
     public void givenAddPlayer_whenUserAndTeamExists_thenAddPlayerToTeamAndReturnTeam() {
         // Arrange
-        final User expectedUser = new User(2L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        final Long teamId = 1L;
+        User expectedUser = new User(2L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
 
         // Act
-        final Team actual = service.addPlayer(expectedUser, teamId);
+        final Team actual = service.addPlayer(expectedUser, VALID_TEAM_ID);
 
         // Assert
-        assertEquals(teamId, actual.getId());
+        assertEquals(VALID_TEAM_ID, actual.getId());
         assertTrue(actual.getPlayers().contains(expectedUser));
     }
 
@@ -44,20 +44,19 @@ public class TeamServiceTest {
     public void givenAddPlayer_whenUserDoesNotExist_thenSaveUserAndAddPlayerToTeamThenReturnTeam() {
         // Arrange
         final User expectedUser = new User(null, "Josdvsdvdseph", "Masdfsdvo", "Cassdvsdvauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        final Long teamId = 1L;
 
         // Act
-        final Team actual = service.addPlayer(expectedUser, teamId);
+        final Team actual = service.addPlayer(expectedUser, VALID_TEAM_ID);
 
         // Assert
-        assertEquals(teamId, actual.getId());
+        assertEquals(VALID_TEAM_ID, actual.getId());
         assertTrue(actual.getPlayers().contains(expectedUser));
     }
 
     @Test
     public void givenAddPlayer_whenTeamDoesNotExists_thenThrowDataIntegrityViolationException() {
         // Arrange
-        final User expectedUser = new User(100L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        final User expectedUser = new User(null, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         final Long teamId = 1000L;
 
         // Act and Assert

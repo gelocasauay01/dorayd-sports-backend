@@ -32,7 +32,6 @@ public class AuthenticationControllerTest {
     private String testInvalidLoginInput;
     private String testLoginInput;
     private String testRegisterInput;
-  
 
     @BeforeAll
     public void setupAll() {

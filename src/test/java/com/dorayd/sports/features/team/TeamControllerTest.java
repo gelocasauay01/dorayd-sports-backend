@@ -21,16 +21,14 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class TeamControllerTest extends IntegrationTestWithAuthentication{
 
-    private final int UPDATE_ID = 2;
-
     @Test
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() throws Exception {
         // Arrange
-        final String expectedJson = "{\"id\":1,\"name\":\"Team Rocket\",\"players\":[]}";
-        final int findId = 1;
+        final int FIND_ID = 1;
+        String expectedJson = "{\"id\":1,\"name\":\"Team Rocket\",\"players\":[]}";
 
         // Act
-        final MvcResult result = mockMvc.perform(get("/api/team/{id}", findId).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/team/{id}", FIND_ID).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -41,7 +39,7 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenFindById_whenTeamDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         // Act 
-        final MvcResult result = mockMvc.perform(get("/api/team/{id}", 100).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(get("/api/team/{id}", 100).with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
@@ -50,7 +48,7 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenCreate_whenTeamIsValid_thenReturnCreatedTeam() throws Exception {
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/team")
+        MvcResult result = mockMvc.perform(post("/api/team")
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content( "{\"id\": null,\"name\":\"Greenpark Summer Team\"}")).andReturn();
@@ -64,10 +62,11 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenUpdate_whenTeamAndIdExists_thenUpdateAndReturnUpdatedTeam() throws Exception {
         // Arrange
-        final String expectedJson = String.format("{\"id\":%d,\"name\":\"Karangalan Team\",\"players\":[]}", UPDATE_ID);
+        final int UPDATE_ID = 2;
+        String expectedJson = String.format("{\"id\":%d,\"name\":\"Karangalan Team\",\"players\":[]}", UPDATE_ID);
 
         //Act
-        final MvcResult result = mockMvc.perform(put("/api/team/{id}", UPDATE_ID)
+        MvcResult result = mockMvc.perform(put("/api/team/{id}", UPDATE_ID)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"name\":\"Karangalan Team\",\"players\":[]}")).andReturn();
@@ -81,10 +80,10 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenDelete_whenTeamWithIdExists_thenDeleteTeam() throws Exception {
         // Arrange
-        final int deleteId = 3;
+        final int DELETE_ID = 3;
 
         // Act
-        final MvcResult result = mockMvc.perform(delete("/api/team/{id}", deleteId).with(user(userDetails))).andReturn();
+        MvcResult result = mockMvc.perform(delete("/api/team/{id}", DELETE_ID).with(user(userDetails))).andReturn();
 
         //Assert
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
@@ -93,11 +92,11 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenAddPlayer_whenPlayerIsValid_thenAddPlayerToTheTeam() throws Exception {
         //Arrange
-        final String requestBody = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
-        final long addId = 5L;
+        final long PLAYER_ID = 5L;
+        String requestBody = "{\"firstName\":\"Reynald\",\"lastName\":\"Boiser\",\"birthDate\":\"1999-08-01\",\"gender\":\"NON_BINARY\"}";
 
         // Act
-        final MvcResult result = mockMvc.perform(post("/api/team/{id}/add_player", addId)
+        MvcResult result = mockMvc.perform(post("/api/team/{id}/add_player", PLAYER_ID)
             .with(user(userDetails))
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody)).andReturn();
