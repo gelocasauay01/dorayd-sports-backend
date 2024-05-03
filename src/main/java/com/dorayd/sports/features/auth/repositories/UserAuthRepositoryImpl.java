@@ -54,20 +54,12 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
 
     @Override
     public UserAuth create(UserAuth newUserAuth) {
-
-        // Saves user first if it does not exist
-        if(newUserAuth.getUser().getId() == null) {
-            User newUser = userRepository.create(newUserAuth.getUser());
-            newUserAuth.setUser(newUser);
-        }
-
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("username", newUserAuth.getUsername());
         parameters.put("password", newUserAuth.getPassword());
         parameters.put("role", newUserAuth.getRole().toString());
         parameters.put("user_id", newUserAuth.getUser().getId());
         simpleJdbcInsert.execute(parameters);
-        
         return newUserAuth;
     }
 

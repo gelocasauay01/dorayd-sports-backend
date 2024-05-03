@@ -2,6 +2,7 @@ package com.dorayd.sports.features.team.repositories;
 
 import java.util.*;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.mappers.TeamMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,7 +31,7 @@ public class TeamRepositoryImpl implements TeamRepository{
     }
 
     @Override
-    public Optional<Team> findById(Long id) {
+    public Optional<Team> findById(long id) {
         try {
             Team team = getTeam(id);
             team.setPlayers(getTeamPlayers(id));
@@ -41,39 +42,44 @@ public class TeamRepositoryImpl implements TeamRepository{
     }
 
     @Override
-    public Team create(Team newTeam) {
+    public Team create(TeamDto newTeam) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", newTeam.getName());
+        parameters.put("name", newTeam.name());
         
         // Save team get the generated id
         Number newId = teamSimpleJdbcInsert.executeAndReturnKey(parameters);
-        newTeam.setId(newId.longValue());
 
          // Save user memberships if players is not empty
-        if(newTeam.getPlayers() != null && !newTeam.getPlayers().isEmpty()) {
-            insertUserMembership(newTeam.getPlayers(), newTeam.getId());
+        if(newTeam.userIds() != null && !newTeam.userIds().isEmpty()) {
+            insertUserMembership(newTeam.userIds(), newId.longValue());
         }
        
-        return newTeam;
+        return new Team(newId.longValue(), newTeam.name(), getTeamPlayers(newId.longValue()));
     }
 
     @Override
-    public Team update(Long id, Team updatedTeam) {
+    public Team update(long id, TeamDto updatedTeam) {
         final String UPDATE_BY_ID_QUERY = "UPDATE teams SET name = ? WHERE id = ?";
-        jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedTeam.getName(), id);
+        jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedTeam.name(), id);
         return findById(id).orElseThrow();
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         final String DELETE_BY_ID_QUERY = "DELETE FROM teams WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }
 
     @Override
-    public Team addPlayer(Long userId, Long teamId) {
+    public Team addPlayer(long userId, long teamId) {
         membershipSimpleJdbcInsert.execute(createTeamMembershipMapParam(teamId, userId));
+        return findById(teamId).orElseThrow();
+    }
+
+    @Override
+    public Team addPlayers(List<Long> userIds, long teamId) {
+        insertUserMembership(userIds, teamId);
         return findById(teamId).orElseThrow();
     }
 
@@ -90,19 +96,20 @@ public class TeamRepositoryImpl implements TeamRepository{
         return jdbcTemplate.query(GET_ALL_PLAYER_BY_TEAM_ID, new UserMapper(), teamId);
     }
 
-    private void insertUserMembership(List<User> users, Long teamId) {
-        MapSqlParameterSource[] parameters = new MapSqlParameterSource[users.size()];
-        for(int index = 0; index < users.size(); index++) {
-            User user = users.get(index);
-            parameters[index] = createTeamMembershipMapParam(teamId, user.getId());
+    private void insertUserMembership(List<Long> userIds, long teamId) {
+        MapSqlParameterSource[] parameters = new MapSqlParameterSource[userIds.size()];
+        for(int index = 0; index < userIds.size(); index++) {
+            parameters[index] = createTeamMembershipMapParam(teamId, userIds.get(index));
         }
         membershipSimpleJdbcInsert.executeBatch(parameters);
     }
 
-    private MapSqlParameterSource createTeamMembershipMapParam(Long teamId, Long userId) {
+    private MapSqlParameterSource createTeamMembershipMapParam(long teamId, long userId) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("team_id", teamId);
         parameters.put("user_id", userId);
         return new MapSqlParameterSource(parameters);
     }
+
+    
 }

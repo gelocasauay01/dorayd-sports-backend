@@ -32,7 +32,7 @@ public class AuthenticationServiceTest {
     @Test
     public void givenRegister_whenCredentialsAreValidAndUserDoesNotExist_thenSaveAndReturnAuthenticationResponse() {
         // Arrange
-        User expectedUser = new User(null, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
+        User expectedUser = new User(0, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
         UserAuth userAuth = new UserAuth("asdf123456456457", "password890", Role.USER, expectedUser);
 
         // Act
@@ -46,7 +46,7 @@ public class AuthenticationServiceTest {
     @Test
     public void givenRegister_whenUsernameExists_thenThrowDuplicateKeyException() {
         // Arrange
-        User expectedUser = new User(null, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
+        User expectedUser = new User(0, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
         UserAuth expectedUserAuth = new UserAuth("abc123", "password1", Role.USER, expectedUser);
 
         // Act and Assert

@@ -2,15 +2,17 @@ package com.dorayd.sports.features.team;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.services.TeamService;
-import com.dorayd.sports.features.user.models.User;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class TeamController {
     private final TeamService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Team> findById(@PathVariable Long id) {
+    public ResponseEntity<Team> findById(@PathVariable long id) {
         final Optional<Team> team = service.findById(id);
 
         return team.map(value -> ResponseEntity
@@ -42,7 +44,7 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<Team> create(@RequestBody Team newTeam) {
+    public ResponseEntity<Team> create(@RequestBody TeamDto newTeam) {
         final Team createdTeam = service.create(newTeam);
         try {
             return ResponseEntity
@@ -56,7 +58,7 @@ public class TeamController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Team> update(@PathVariable Long id, @RequestBody Team updatedTeam) {
+    public ResponseEntity<Team> update(@PathVariable long id, @RequestBody TeamDto updatedTeam) {
         return ResponseEntity
             .ok()
             .body(service.update(id, updatedTeam));
@@ -76,10 +78,18 @@ public class TeamController {
     }
 
     @PostMapping("/{teamId}/add_player")
-    public ResponseEntity<Team> addPlayer(@PathVariable Long teamId, @RequestBody User newPlayer) {
+    public ResponseEntity<Team> addPlayer(@PathVariable long teamId, @RequestParam long userId) {
         return ResponseEntity
             .ok()
-            .body(service.addPlayer(newPlayer, teamId));
+            .body(service.addPlayer(userId, teamId));
     }
+
+    @PostMapping("/{teamId}/bulk_add_player")
+    public ResponseEntity<Team> addPlayers(@PathVariable long teamId, @RequestBody List<Long> userIds) {
+        return ResponseEntity
+            .ok()
+            .body(service.addPlayers(userIds, teamId));
+    }
+    
     
 }

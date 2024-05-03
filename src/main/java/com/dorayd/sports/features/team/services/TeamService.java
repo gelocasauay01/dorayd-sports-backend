@@ -1,9 +1,10 @@
 package com.dorayd.sports.features.team.services;
 
 import java.util.Optional;
+import java.util.List;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.models.Team;
-import com.dorayd.sports.features.user.models.User;
 
 /**
  * This interface represents the service for managing teams.
@@ -15,7 +16,7 @@ public interface TeamService {
      * @param id The ID of the team to find.
      * @return An Optional containing the found Team, or an empty Optional if no Team was found with the given ID.
      */
-    Optional<Team> findById(Long id);
+    Optional<Team> findById(long id);
 
     /**
      * Creates a new team.
@@ -23,7 +24,7 @@ public interface TeamService {
      * @param newTeam The new Team to create.
      * @return The created Team.
      */
-    Team create(Team newTeam); 
+    Team create(TeamDto newTeam); 
 
     /**
      * Updates an existing team.
@@ -32,7 +33,7 @@ public interface TeamService {
      * @param updatedTeam The Team entity with updated information.
      * @return The updated Team.
      */
-    Team update(Long id, Team updatedTeam);
+    Team update(long id, TeamDto updatedTeam);
 
     /**
      * Deletes a team by its ID.
@@ -40,14 +41,23 @@ public interface TeamService {
      * @param id The ID of the team to delete.
      * @return A boolean indicating whether the deletion was successful.
      */
-    boolean delete(Long id);
+    boolean delete(long id);
 
     /**
      * Adds a player to a team.
      *
-     * @param user The user to be added to the team.
+     * @param userId The ID of user to be added to the team.
      * @param teamId The ID of the team.
      * @return The updated team.
      */
-    Team addPlayer(User user, Long teamId);
+    Team addPlayer(long userId, long teamId);
+
+     /**
+     * Adds multiple players to a team.
+     *
+     * @param userIds The list of user IDs to be added to the team.
+     * @param teamId The ID of the team.
+     * @return The updated team.
+     */
+    Team addPlayers(List<Long> userIds, long teamId);
 }

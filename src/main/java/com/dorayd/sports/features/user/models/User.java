@@ -13,7 +13,7 @@ import lombok.*;
 public class User {
 
     @EqualsAndHashCode.Exclude
-    private Long id;
+    private long id;
 
     @NotNull(message = "First name must not be null")
     @Size(min = 3, max = 100, message = "First name must have 3-100 characters")

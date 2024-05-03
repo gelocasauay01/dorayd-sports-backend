@@ -7,69 +7,49 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.repositories.TeamRepository;
-import com.dorayd.sports.features.user.models.User;
-import com.dorayd.sports.features.user.repositories.UserRepository;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 public class TeamServiceImpl implements TeamService{
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
 
     @Override
-    public Optional<Team> findById(Long id) {
+    public Optional<Team> findById(long id) {
         log.info("Finding Team with id: {}", id);
         return teamRepository.findById(id);
     }
 
     @Override
-    public Team create(Team newTeam) {
+    public Team create(TeamDto newTeam) {
         log.info("Saving team to the database: {}", newTeam);
-
-        if(newTeam.getPlayers() != null && !newTeam.getPlayers().isEmpty()) {
-            savePlayers(newTeam.getPlayers());
-        }
-
         return teamRepository.create(newTeam);
     }
 
     @Override
-    public Team update(Long id, Team updatedTeam) {
+    public Team update(long id, TeamDto updatedTeam) {
         log.info("Updating team with id {} with {}", id, updatedTeam);
         return teamRepository.update(id, updatedTeam);
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         log.info("Deleting team with id {}", id);
         return teamRepository.delete(id);
     }
 
     @Override
-    public Team addPlayer(User user, Long teamId) {
-        log.info("Adding user: {} in team with id {}", user, teamId);
-
-        // Save user if it still does not exist
-        if(user.getId() == null) {
-            user = userRepository.create(user);
-        }
-
-        return teamRepository.addPlayer(user.getId(), teamId);
+    public Team addPlayer(long userId, long teamId) {
+        log.info("Adding user with id: {} in team with id {}", userId, teamId);
+        return teamRepository.addPlayer(userId, teamId);
     }
 
-    private void savePlayers(List<User> players) {
-        for(int index = 0; index < players.size(); index++) {
-            User user = players.get(index);
-            if(user.getId() == null) {
-                User createdUser = userRepository.create(user);
-                user.setId(createdUser.getId());
-            } else {
-                Optional<User> queriedUser = userRepository.findById(user.getId());
-                players.set(index, queriedUser.orElseThrow());
-            }        
-        }
+    @Override
+    public Team addPlayers(List<Long> userIds, long teamId) {
+        log.info("Adding users with the following ids: {} in team with id {}", userIds, teamId);
+        return teamRepository.addPlayers(userIds, teamId);
     }
 }

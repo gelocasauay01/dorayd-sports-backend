@@ -2,7 +2,6 @@ package com.dorayd.sports.features.user;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -49,14 +48,13 @@ public class UserRepositoryTest {
     @Test 
     public void givenCreate_whenUserIsValid_thenReturnCreatedUser() {
         // Arrange
-        User input = new User(null, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
+        User input = new User(0, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
 
         // Act
         User actual = repository.create(input);
 
         // Assert 
-        assertNotNull(actual.getId());
-        assertTrue(actual.getId().compareTo(0L) > 0);
+        assertTrue(actual.getId() > 0);
         assertEquals(input, actual);
     }
 
@@ -64,7 +62,7 @@ public class UserRepositoryTest {
     public void givenUpdate_whenUserExists_thenUpdateUserAndReturn() {
         // Arrange
         final Long UPDATE_ID = 2L;
-        User update = new User(null, "Jones", "Hayley", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
+        User update = new User(0, "Jones", "Hayley", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
 
         // Act
         User actual = repository.update(UPDATE_ID, update);

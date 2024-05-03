@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.repositories.TeamRepository;
 
@@ -29,10 +30,11 @@ public class TeamRepositoryTest {
     @Test
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() {
         // Arrange
-        Team expected = new Team(1L, "Team Rocket", new ArrayList<>());
+        final long FIND_ID = 1l; 
+        Team expected = new Team(FIND_ID, "Team Rocket", new ArrayList<>());
 
         // Act
-        Optional<Team> actual = repository.findById(1L);
+        Optional<Team> actual = repository.findById(FIND_ID);
 
         // Assert
         assertTrue(actual.isPresent());
@@ -41,8 +43,11 @@ public class TeamRepositoryTest {
 
     @Test
     public void givenFindById_whenTeamDoesNotExists_thenReturnEmpty() {
+        // Arrange
+        final long INVALID_ID = 1000l;
+
         // Act
-        Optional<Team> actual = repository.findById(1000L);
+        Optional<Team> actual = repository.findById(INVALID_ID);
 
         // Assert
         assertTrue(actual.isEmpty());
@@ -51,39 +56,36 @@ public class TeamRepositoryTest {
     @Test 
     public void givenCreate_whenTeamIsValid_thenReturnCreatedTeam() {
         // Arrange
-        Team input = new Team(null, "Digimon Gangsters", new ArrayList<>());
+        final String CREATE_NAME = "Digimon Gangsters";
+        TeamDto input = new TeamDto(CREATE_NAME, new ArrayList<>());
+        Team expected = new Team(0l, CREATE_NAME, new ArrayList<>());
 
         // Act
         Team actual = repository.create(input);
 
         // Assert 
-        assertNotNull(actual.getId());
-        assertTrue(actual.getId().compareTo(0L) > 0);
-        assertEquals(input, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void givenUpdate_whenTeamExists_thenUpdateTeamAndReturn() {
         // Arrange
-        final Long UPDATE_ID = 2L;
-        Team update = new Team(null, "Tekken Gang", new ArrayList<>());
+        final long UPDATE_ID = 2l;
+        final String UPDATE_NAME = "Tekken Gang";
+        TeamDto input = new TeamDto(UPDATE_NAME, new ArrayList<>());
+        Team expected = new Team(0l, UPDATE_NAME, new ArrayList<>());
 
         // Act
-        Team actual = repository.update(UPDATE_ID, update);
-        Optional<Team> queriedAActual = repository.findById(actual.getId());
+        Team actual = repository.update(UPDATE_ID, input);
 
         // Assert
-        assertEquals(UPDATE_ID, actual.getId());
-        assertEquals(update, actual);
-        assertTrue(queriedAActual.isPresent());
-        assertEquals(UPDATE_ID, queriedAActual.get().getId());
-        assertEquals(update, queriedAActual.get());
+        assertEquals(expected, actual);
     }
 
     @Test
     public void givenDelete_whenTeamExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4L;
+        final long DELETE_ID = 4l;
 
         // Act 
         boolean isDeleted = repository.delete(DELETE_ID);
@@ -97,8 +99,8 @@ public class TeamRepositoryTest {
     @Test
     public void givenAddPlayer_whenTeamAndUserExists_thenAddPlayerAndReturnTeam() {
         // Arrange
-        User expectedAddedPlayer = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        Team expectedTeam = new Team(1L, "Team Rocket", List.of(expectedAddedPlayer));
+        User expectedAddedPlayer = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        Team expectedTeam = new Team(1l, "Team Rocket", List.of(expectedAddedPlayer));
 
         // Act
         Team actual = repository.addPlayer(expectedAddedPlayer.getId(), expectedTeam.getId());
@@ -110,7 +112,7 @@ public class TeamRepositoryTest {
     @Test
     public void givenAddPlayer_whenUserDoesNotExist_thenThrowDataIntegrityViolationException() {
         // Arrange
-        User expectedAddedPlayer = new User(132423423423L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expectedAddedPlayer = new User(132423423423l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         Team expectedTeam = new Team(1L, "Team Rocket", List.of(expectedAddedPlayer));
 
         // Act and Assert

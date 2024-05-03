@@ -3,7 +3,6 @@ package com.dorayd.sports.features.league.services;
 import java.util.Optional;
 
 import com.dorayd.sports.features.team.models.Team;
-import com.dorayd.sports.features.team.repositories.TeamRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import com.dorayd.sports.features.league.repositories.LeagueRepository;
 public class LeagueServiceImpl implements LeagueService {
 
     private final LeagueRepository leagueRepository;
-    private final TeamRepository teamRepository;
 
     @Override
     public Optional<League> findById(Long id) {
@@ -45,13 +43,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     public League addTeam(Team team, Long leagueId) {
-        log.info("Adding team: {} to league with id {}",team, leagueId);
-
-        // Save team if it still does not exist
-        if(team.getId() == null) {
-            team = teamRepository.create(team);
-        }
-
+        log.info("Adding team: {} to league with id {}", team, leagueId);
         return leagueRepository.addTeam(team.getId(), leagueId);
     }
 

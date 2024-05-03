@@ -24,7 +24,7 @@ public class LeagueServiceTest {
     @Test
     public void givenAddTeam_whenTeamExists_thenAddTeamAndReturnLeague() {
         // Arrange
-        final Team expectedTeam = new Team(1L, "Team Rocket", new ArrayList<>());
+        final Team expectedTeam = new Team(1, "Team Rocket", new ArrayList<>());
         final Long leagueId = 1L;
 
         // Act
@@ -38,7 +38,7 @@ public class LeagueServiceTest {
     @Test
     public void givenAddTeam_whenTeamDoesNotExist_thenCreateTeamAndSaveMembership() {
         // Arrange
-        final Team expectedTeam = new Team(null, "Team Harina", new ArrayList<>());
+        final Team expectedTeam = new Team(0, "Team Harina", new ArrayList<>());
         final Long leagueId = 1L;
 
         // Act

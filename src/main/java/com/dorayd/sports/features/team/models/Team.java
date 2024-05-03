@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 public class Team {
 
     @EqualsAndHashCode.Exclude
-    private Long id;
+    private long id;
     private String name;
 
     @EqualsAndHashCode.Exclude

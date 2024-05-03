@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.models.Team;
 import com.dorayd.sports.features.team.services.TeamService;
 import com.dorayd.sports.features.user.models.Gender;
@@ -22,7 +23,9 @@ import com.dorayd.sports.features.user.models.User;
 @SpringBootTest
 @ActiveProfiles("test")
 public class TeamServiceTest {
-    final Long VALID_TEAM_ID = 1L;
+
+    final long VALID_TEAM_ID = 1l;
+    final long VALID_USER_ID = 1l;
 
     @Autowired
     private TeamService service;
@@ -30,10 +33,10 @@ public class TeamServiceTest {
      @Test
     public void givenAddPlayer_whenUserAndTeamExists_thenAddPlayerToTeamAndReturnTeam() {
         // Arrange
-        User expectedUser = new User(2L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expectedUser = new User(VALID_USER_ID, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
 
         // Act
-        final Team actual = service.addPlayer(expectedUser, VALID_TEAM_ID);
+        final Team actual = service.addPlayer(VALID_USER_ID, VALID_TEAM_ID);
 
         // Assert
         assertEquals(VALID_TEAM_ID, actual.getId());
@@ -41,39 +44,34 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void givenAddPlayer_whenUserDoesNotExist_thenSaveUserAndAddPlayerToTeamThenReturnTeam() {
+    public void givenAddPlayer_whenUserDoesNotExist_thenThrowDataIntegrityException() {
         // Arrange
-        final User expectedUser = new User(null, "Josdvsdvdseph", "Masdfsdvo", "Cassdvsdvauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        final long NOT_EXISTING_USER_ID = 123123l;
 
-        // Act
-        final Team actual = service.addPlayer(expectedUser, VALID_TEAM_ID);
-
-        // Assert
-        assertEquals(VALID_TEAM_ID, actual.getId());
-        assertTrue(actual.getPlayers().contains(expectedUser));
+        // Act and Assert
+        assertThrows(DataIntegrityViolationException.class, () -> service.addPlayer(NOT_EXISTING_USER_ID, VALID_TEAM_ID));
     }
 
     @Test
     public void givenAddPlayer_whenTeamDoesNotExists_thenThrowDataIntegrityViolationException() {
         // Arrange
-        final User expectedUser = new User(null, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        final Long teamId = 1000L;
+        final long INVALID_TEAM_ID = 1000l;
 
         // Act and Assert
-        assertThrows(DataIntegrityViolationException.class, () -> service.addPlayer(expectedUser, teamId));
+        assertThrows(DataIntegrityViolationException.class, () -> service.addPlayer(VALID_USER_ID, INVALID_TEAM_ID));
     }
 
     @Test
     public void givenCreate_whenTeamHasPlayers_thenSaveTeamAndPlayers() {
         // Arrange
-        final List<User> expectedPlayers = new ArrayList<>();
-        expectedPlayers.add(new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE));
-        expectedPlayers.add(new User(null, "dsvsdvsdv", "dfbdfbfdb", "fgngfngf", LocalDate.of(1999, 8, 1), Gender.FEMALE));
-        expectedPlayers.add(new User(null, "Joseph", "Mardghmghmhgmhgo", "fgngfn", LocalDate.of(1999, 8, 1), Gender.NON_BINARY));
-        final Team expected = new Team(1L, "Team Rocket", expectedPlayers);
+        
+        List<User> expectedPlayers = new ArrayList<>();
+        expectedPlayers.add(new User(VALID_USER_ID, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE));
+        Team expected = new Team(VALID_TEAM_ID, "Team Rocket", expectedPlayers);
+        TeamDto input = new TeamDto("Team Rocket", List.of(1l));
 
         // Act
-        final Team actual = service.create(expected);
+        final Team actual = service.create(input);
 
         // Assert
         assertEquals(expected, actual);

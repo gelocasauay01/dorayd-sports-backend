@@ -1,7 +1,9 @@
 package com.dorayd.sports.features.team.repositories;
 
 import java.util.Optional;
+import java.util.List;
 
+import com.dorayd.sports.features.team.dto.TeamDto;
 import com.dorayd.sports.features.team.models.Team;
 
 /**
@@ -14,7 +16,7 @@ public interface TeamRepository {
      * @param id The ID of the Team to find.
      * @return An Optional containing the found Team, or an empty Optional if no Team was found with the given ID.
      */
-    Optional<Team> findById(Long id);
+    Optional<Team> findById(long id);
 
     /**
      * Creates a new Team.
@@ -22,7 +24,7 @@ public interface TeamRepository {
      * @param newTeam The Team to create.
      * @return The created Team.
      */
-    Team create(Team newTeam);
+    Team create(TeamDto newTeam);
 
     /**
      * Updates an existing Team.
@@ -31,7 +33,7 @@ public interface TeamRepository {
      * @param updatedTeam The Team entity with updated information.
      * @return The updated Team.
      */
-    Team update(Long id, Team updatedTeam);
+    Team update(long id, TeamDto updatedTeam);
 
     /**
      * Deletes a Team by its ID.
@@ -39,7 +41,7 @@ public interface TeamRepository {
      * @param id The ID of the Team to delete.
      * @return A boolean indicating whether the deletion was successful.
      */
-    boolean delete(Long id);
+    boolean delete(long id);
 
     /**
      * Adds a player to a team.
@@ -48,5 +50,14 @@ public interface TeamRepository {
      * @param teamId The ID of the team.
      * @return The updated team.
      */
-    Team addPlayer(Long userId, Long teamId);
+    Team addPlayer(long userId, long teamId);
+
+    /**
+     * Adds multiple players to a team.
+     *
+     * @param userIds The list of user IDs to be added to the team.
+     * @param teamId The ID of the team.
+     * @return The updated team.
+     */
+    Team addPlayers(List<Long> userIds, long teamId);
 }
