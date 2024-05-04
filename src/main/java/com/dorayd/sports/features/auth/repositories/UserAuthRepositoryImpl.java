@@ -29,21 +29,19 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
     }
 
     @Override
-    public Optional<UserAuth> findByUsername(String username) {
+    public Optional<UserAuth> findByEmail(String email) {
         try {
-            final String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE username = ?";
+            final String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE email = ?";
             UserAuth queriedUserAuth = jdbcTemplate.queryForObject(FIND_BY_USERNAME_QUERY,
                 (rs, rowNum) -> {
-                    User user = new User();
-                    user.setId(rs.getLong("user_id"));
                     return new UserAuth(
-                        rs.getString("username"), 
+                        rs.getString("email"), 
                         rs.getString("password"), 
                         Role.valueOf(rs.getString("role")), 
-                        user
+                        User.builder().id(rs.getLong("user_id")).build()
                     );
                 },
-                username
+                email
             );
             queriedUserAuth.setUser(userRepository.findById(queriedUserAuth.getUser().getId()).orElseThrow());
             return Optional.of(queriedUserAuth);
@@ -54,8 +52,14 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
 
     @Override
     public UserAuth create(UserAuth newUserAuth) {
+
+        if(newUserAuth.getUser().getId() == 0) {
+            User registeredUser = userRepository.create(newUserAuth.getUser());
+            newUserAuth.setUser(registeredUser);
+        }
+        
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("username", newUserAuth.getUsername());
+        parameters.put("email", newUserAuth.getEmail());
         parameters.put("password", newUserAuth.getPassword());
         parameters.put("role", newUserAuth.getRole().toString());
         parameters.put("user_id", newUserAuth.getUser().getId());
@@ -64,9 +68,9 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
     }
 
     @Override
-    public boolean updatePassword(String password, String username) {
-        final String UPDATE_PASSWORD_BY_USERNAME_QUERY = "UPDATE user_auth SET password = ? WHERE username = ?";
-        int updatedCount = jdbcTemplate.update(UPDATE_PASSWORD_BY_USERNAME_QUERY, password, username);
+    public boolean updatePassword(String password, String email) {
+        final String UPDATE_PASSWORD_BY_USERNAME_QUERY = "UPDATE user_auth SET password = ? WHERE email = ?";
+        int updatedCount = jdbcTemplate.update(UPDATE_PASSWORD_BY_USERNAME_QUERY, password, email);
         return updatedCount > 0;
     }
     

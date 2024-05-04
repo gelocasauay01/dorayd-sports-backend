@@ -37,7 +37,7 @@ public class AuthenticationControllerTest {
     public void setupAll() {
         testInvalidLoginInput = """
             {
-                "username": "abc1234560984560984",
+                "email": "abc1234560984560984@yahoo.com",
                 "password": "password1",
                 "role": "USER",
                 "user": {
@@ -51,7 +51,7 @@ public class AuthenticationControllerTest {
         """;
         testLoginInput = """
             {
-                "username": "abc123",
+                "email": "abc123@yahoo.com",
                 "password": "password1",
                 "role": "USER",
                 "user": {
@@ -65,7 +65,7 @@ public class AuthenticationControllerTest {
         """;
         testRegisterInput = """
             {
-                "username": "abc12345678",
+                "email": "abc12345678@yahoo.com",
                 "password": "password12345",
                 "role": "USER",
                 "user": {
@@ -80,7 +80,7 @@ public class AuthenticationControllerTest {
     }   
     
     @Test
-    public void givenRegister_whenUsernameDoesNotExist_thenReturnAuthenticationResponse() throws Exception {
+    public void givenRegister_whenEmailDoesNotExist_thenReturnAuthenticationResponse() throws Exception {
         //Act
         MvcResult result = mockMvc.perform(post("/api/auth/register")
             .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void givenRegister_whenUsernameExists_thenReturnConflictStatusCode() throws Exception {
+    public void givenRegister_whenEmailExists_thenReturnConflictStatusCode() throws Exception {
         //Act
         MvcResult result = mockMvc.perform(post("/api/auth/register")
             .contentType(MediaType.APPLICATION_JSON)

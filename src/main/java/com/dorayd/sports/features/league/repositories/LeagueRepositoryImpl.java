@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import com.dorayd.sports.features.league.dto.LeagueDto;
 import com.dorayd.sports.features.league.models.League;
 
 @Repository
@@ -28,7 +29,7 @@ public class LeagueRepositoryImpl implements LeagueRepository{
     }
 
     @Override
-    public Optional<League> findById(Long id) {
+    public Optional<League> findById(long id) {
         try {
             League league = getLeague(id);
             league.setTeams(getTeams(id));
@@ -39,30 +40,29 @@ public class LeagueRepositoryImpl implements LeagueRepository{
     }
 
     @Override
-    public League create(League newLeague) {
+    public League create(LeagueDto newLeague) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("title", newLeague.getTitle());
-        Number newId = leagueSimpleJdbcInsert.executeAndReturnKey(parameters);
-        newLeague.setId(newId.longValue());
-        return newLeague;
+        parameters.put("title", newLeague.title());
+        long newId = leagueSimpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+        return new League(newId, newLeague.title(), getTeams(newId));
     }
 
     @Override
-    public League update(Long id, League updatedLeague) {
+    public League update(long id, LeagueDto updatedLeague) {
         final String UPDATE_BY_ID_QUERY = "UPDATE leagues SET title = ? WHERE id = ?";
-        jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedLeague.getTitle(), id);
+        jdbcTemplate.update(UPDATE_BY_ID_QUERY, updatedLeague.title(), id);
         return findById(id).orElseThrow();
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         final String DELETE_BY_ID_QUERY = "DELETE FROM leagues WHERE id = ?";
         int deletedRows = jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
         return deletedRows > 0;
     }
 
     @Override
-    public League addTeam(Long teamId, Long leagueId) {
+    public League addTeam(long teamId, long leagueId) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("team_id", teamId);
         parameters.put("league_id", leagueId);

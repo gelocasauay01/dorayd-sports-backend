@@ -33,7 +33,7 @@ public class AuthenticationServiceTest {
     public void givenRegister_whenCredentialsAreValidAndUserDoesNotExist_thenSaveAndReturnAuthenticationResponse() {
         // Arrange
         User expectedUser = new User(0, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        UserAuth userAuth = new UserAuth("asdf123456456457", "password890", Role.USER, expectedUser);
+        UserAuth userAuth = new UserAuth("asdf123456456457@yahoo.com", "password890", Role.USER, expectedUser);
 
         // Act
         AuthenticationResponse response = service.register(userAuth);
@@ -44,10 +44,10 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void givenRegister_whenUsernameExists_thenThrowDuplicateKeyException() {
+    public void givenRegister_whenEmailExists_thenThrowDuplicateKeyException() {
         // Arrange
         User expectedUser = new User(0, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        UserAuth expectedUserAuth = new UserAuth("abc123", "password1", Role.USER, expectedUser);
+        UserAuth expectedUserAuth = new UserAuth("abc123@yahoo.com", "password1", Role.USER, expectedUser);
 
         // Act and Assert
         assertThrows(DuplicateKeyException.class, () -> service.register(expectedUserAuth));
@@ -57,7 +57,7 @@ public class AuthenticationServiceTest {
     public void givenLogin_whenUserExists_thenReturnAuthenticationResponse(){ 
         // Arrange
         User expectedUser = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        UserAuth expectedUserAuth = new UserAuth("abc123", "password1", Role.USER, expectedUser);
+        UserAuth expectedUserAuth = new UserAuth("abc123@yahoo.com", "password1", Role.USER, expectedUser);
 
         // Act
         AuthenticationResponse response = service.authenticate(expectedUserAuth);
@@ -70,7 +70,7 @@ public class AuthenticationServiceTest {
     @Test
     public void givenLogin_whenUserDoesNotExist_thenThrowBadCredentialsException(){ 
         // Arrange
-        UserAuth expectedUserAuth = new UserAuth("abc12sdvsdv3", "password1sacsacsa", Role.USER, null);
+        UserAuth expectedUserAuth = new UserAuth("abc12sdvsdv3@yahoo.com", "password1sacsacsa", Role.USER, null);
 
         // Act
         assertThrows(BadCredentialsException.class, () -> service.authenticate(expectedUserAuth));

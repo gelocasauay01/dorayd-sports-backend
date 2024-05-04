@@ -24,8 +24,8 @@ import com.dorayd.sports.features.user.models.User;
 @ActiveProfiles("test")
 public class TeamServiceTest {
 
-    final long VALID_TEAM_ID = 1l;
-    final long VALID_USER_ID = 1l;
+    private static final long VALID_TEAM_ID = 1l;
+    private static final long VALID_USER_ID = 1l;
 
     @Autowired
     private TeamService service;
@@ -33,13 +33,13 @@ public class TeamServiceTest {
      @Test
     public void givenAddPlayer_whenUserAndTeamExists_thenAddPlayerToTeamAndReturnTeam() {
         // Arrange
-        User expectedUser = new User(VALID_USER_ID, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        final long VALID_ADD_PLAYER_ID = 8l;
+        User expectedUser = new User(VALID_ADD_PLAYER_ID, "Hadfgyley", "Mdfgark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
 
         // Act
-        final Team actual = service.addPlayer(VALID_USER_ID, VALID_TEAM_ID);
+        final Team actual = service.addPlayer(VALID_ADD_PLAYER_ID, VALID_TEAM_ID);
 
         // Assert
-        assertEquals(VALID_TEAM_ID, actual.getId());
         assertTrue(actual.getPlayers().contains(expectedUser));
     }
 

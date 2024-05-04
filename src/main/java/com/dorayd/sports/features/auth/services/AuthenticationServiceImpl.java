@@ -30,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
         UserAuth registeredUserAuth = userAuthRepository.create(newUserAuth);
 
-        log.info("Successfully registered user: {}", registeredUserAuth.getUsername());
+        log.info("Successfully registered user: {}", registeredUserAuth.getEmail());
         
         return new AuthenticationResponse(registeredUserAuth.getUser(), generateTokenWithNowIssueDateAndTomorrowExpiration(registeredUserAuth));
     }
@@ -38,14 +38,14 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     @Override
     public AuthenticationResponse authenticate(UserAuth userAuthFromRequest) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            userAuthFromRequest.getUsername(), 
+            userAuthFromRequest.getEmail(), 
             userAuthFromRequest.getPassword()
         );
         authenticationManager.authenticate(authentication);
 
-        log.info("Successfully authenticated user: {}", userAuthFromRequest.getUsername());
+        log.info("Successfully authenticated user: {}", userAuthFromRequest.getEmail());
 
-        UserAuth userAuth = userAuthRepository.findByUsername(userAuthFromRequest.getUsername()).orElseThrow();
+        UserAuth userAuth = userAuthRepository.findByEmail(userAuthFromRequest.getEmail()).orElseThrow();
         return new AuthenticationResponse(userAuth.getUser(),  generateTokenWithNowIssueDateAndTomorrowExpiration(userAuth));
     }
 

@@ -1,10 +1,11 @@
 package com.dorayd.sports.features.league;
 
-import com.dorayd.sports.features.team.models.Team;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dorayd.sports.features.league.dto.LeagueDto;
 import com.dorayd.sports.features.league.models.League;
 import com.dorayd.sports.features.league.services.LeagueService;
 
@@ -42,7 +43,7 @@ public class LeagueController {
     }
 
     @PostMapping
-    public ResponseEntity<League> create(@RequestBody League newLeague) {
+    public ResponseEntity<League> create(@RequestBody LeagueDto newLeague) {
         final League createdLeague = service.create(newLeague);
         try {
             return ResponseEntity
@@ -56,7 +57,7 @@ public class LeagueController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<League> update(@PathVariable Long id, @RequestBody League updatedLeague) {
+    public ResponseEntity<League> update(@PathVariable long id, @RequestBody LeagueDto updatedLeague) {
         return ResponseEntity
             .ok()
             .body(service.update(id, updatedLeague));
@@ -76,10 +77,10 @@ public class LeagueController {
     }
 
     @PostMapping("/{leagueId}/add_team")
-    public ResponseEntity<League> addTeam(@PathVariable Long leagueId, @RequestBody Team newTeam) {
+    public ResponseEntity<League> addTeam(@PathVariable long leagueId, @RequestParam long teamId) {
         return ResponseEntity
                 .ok()
-                .body(service.addTeam(newTeam, leagueId));
+                .body(service.addTeam(teamId, leagueId));
     }
     
 }

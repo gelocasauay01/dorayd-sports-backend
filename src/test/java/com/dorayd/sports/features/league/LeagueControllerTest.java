@@ -22,8 +22,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class LeagueControllerTest extends IntegrationTestWithAuthentication{
 
-    public static final int UPDATE_ID = 2;
-    public static final int ADD_TEAM_ID = 4;
+    private static final int UPDATE_ID = 2;
+    private static final int VALID_LEAGUE_ID = 4;
 
     @Test
     public void givenFindById_whenLeagueExists_thenReturnSpecificLeague() throws Exception {
@@ -107,16 +107,13 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenAddTeam_whenLeagueAndTeamExists_thenReturnLeagueAndStatusOk() throws Exception {
         //Arrange
-        String requestBody = "{\"id\":4}";
+        final int TEAM_ID = 4;
 
         // Act
-        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", ADD_TEAM_ID)
-                .with(user(userDetails))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)).andReturn();
+        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team?teamId={teamId}", VALID_LEAGUE_ID, TEAM_ID)
+                .with(user(userDetails))).andReturn();
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
         assertEquals(MediaType.APPLICATION_JSON, MediaType.valueOf(Objects.requireNonNull(result.getResponse().getContentType())));
         assertTrue(result.getResponse().getContentAsString().contains("Team Magma"));
     }
@@ -124,31 +121,15 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     @Test
     public void givenAddTeam_whenLeagueDoesNotExist_thenReturnNotFoundStatus() throws Exception {
         //Arrange
-        String requestBody = "{\"id\":1,\"name\":\"Greenpark league\",\"players\":[]}";
+        final int INVALID_LEAGUE_ID = 123123;
+        final int VALID_TEAM_ID = 4;
 
         // Act
-        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", 213213)
-                .with(user(userDetails))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)).andReturn();
+        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team?teamId={teamId}", INVALID_LEAGUE_ID, VALID_TEAM_ID)
+                .with(user(userDetails))).andReturn();
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
     }
 
-    @Test
-    public void givenAddTeam_whenLeagueExistAndTeamDoesNotExist_thenSaveTeamAndReturnUpdatedLeague() throws Exception {
-        //Arrange
-        String requestBody = "{\"id\":null,\"name\":\"Greenpark Midget\",\"players\":[]}";
-
-        // Act
-        MvcResult result = mockMvc.perform(post("/api/league/{id}/add_team", ADD_TEAM_ID)
-                .with(user(userDetails))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)).andReturn();
-
-        // Assert
-        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertTrue(result.getResponse().getContentAsString().contains("Greenpark Midget"));
-    }
 }

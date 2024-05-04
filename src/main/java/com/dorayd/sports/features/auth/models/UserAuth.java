@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Data
 public class UserAuth implements UserDetails{
-    private String username;
+    private String email;
     private String password;
     private Role role;
     private User user;
@@ -40,5 +40,10 @@ public class UserAuth implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getUsername() {
+       return email;
     }
 }

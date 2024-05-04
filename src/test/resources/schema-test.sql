@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS user_auth (
-    username VARCHAR(100) PRIMARY KEY,
+    email VARCHAR(100) PRIMARY KEY,
     password VARCHAR(200) NOT NULL,
     role VARCHAR(10) NOT NULL,
     user_id INT NOT NULL,

@@ -94,7 +94,7 @@ public class JwtServiceTest {
         String token = service.generateToken(auth, issueDate, expirationDate);
 
         // Act
-        auth.setUsername("ascsacsacsacs");
+        auth.setEmail("ascsacsacsacs");
         boolean isValid = service.isValid(token, auth);
 
         // Assert

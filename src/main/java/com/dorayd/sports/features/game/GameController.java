@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -33,9 +35,16 @@ public class GameController {
     @PostMapping
     public ResponseEntity<Game> create(@RequestBody GameDto gameDto) {
         Game game = service.create(gameDto);
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(game);
+        try {
+            return ResponseEntity
+                .created(new URI(String.format("%s/%d", GAME_API_URL, game.getId())))
+                .body(game);
+        } catch(URISyntaxException e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .build();
+        }
+        
     }
 
     @PatchMapping("/{id}/update_schedule")

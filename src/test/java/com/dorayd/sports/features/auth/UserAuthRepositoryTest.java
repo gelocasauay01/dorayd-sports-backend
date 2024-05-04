@@ -27,62 +27,60 @@ public class UserAuthRepositoryTest {
     @Test
     public void givenFindByUsername_whenUserExist_thenReturnUserAuth() {
         // Arrange
-        User expectedUser = new User(1, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        UserAuth expectedUserAuth = new UserAuth("abc123", "$2a$10$N35fUCHQ7/OwM4Dcw6LH8uwL8yFIJ/PnoxgAuVDJEUuNlXGANmu1G", Role.USER, expectedUser);
+        User expectedUser = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        UserAuth expectedUserAuth = new UserAuth("abc123@yahoo.com", "$2a$10$N35fUCHQ7/OwM4Dcw6LH8uwL8yFIJ/PnoxgAuVDJEUuNlXGANmu1G", Role.USER, expectedUser);
 
         // Act
-        Optional<UserAuth> actual = repository.findByUsername("abc123");
+        Optional<UserAuth> actual = repository.findByEmail("abc123@yahoo.com");
 
         // Assert
-        assertTrue(actual.isPresent());
-        assertTrue(isUserAuthEqual(expectedUserAuth, actual.get()));
+        assertEquals(expectedUserAuth, actual.get());
     }
 
     @Test
     public void givenFindById_whenUserDoesExists_thenReturnNotFoundStatus() {
         // Act
-        Optional<UserAuth> actual = repository.findByUsername("testuser");
+        Optional<UserAuth> actual = repository.findByEmail("testuser@yahoo.com");
 
         // Assert
         assertTrue(actual.isEmpty());
     }
 
     @Test 
-    public void givenSave_whenUserAuthIsValidAndUserDoesNotExist_thenReturnCreatedUserAuth() {
+    public void givenCreate_whenUserAuthIsValidAndUserExist_thenReturnCreatedUserAuth() {
         // Arrange
-        User expectedUser = new User(0, "Joseph", "Bryan", "Benington", LocalDate.of(1999, 8, 1), Gender.FEMALE);
-        UserAuth expectedUserAuth = new UserAuth("asdf123", "password890", Role.USER, expectedUser);
+        User expectedUser = new User(4l, "Hayley", "Mark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
+        UserAuth expectedUserAuth = new UserAuth("asdf123436346@yahoo.com", "password890", Role.USER, expectedUser);
 
         // Act
         UserAuth actual = repository.create(expectedUserAuth);
 
         // Assert
-        assertTrue(isUserAuthEqual(expectedUserAuth, actual));
-        assertNotNull(actual.getUser().getId());
+        assertEquals(expectedUserAuth, actual);
     }
 
     @Test 
-    public void givenSave_whenUserAuthIsValidAndUserExist_thenReturnCreatedUserAuth() {
+    public void givenCreate_whenUserAuthIsValidAndUserDoesNotExist_thenReturnCreatedUserAuth() {
         // Arrange
-        User expectedUser = new User(4L, "Hayley", "Mark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
-        UserAuth expectedUserAuth = new UserAuth("asdf123436346", "password890", Role.USER, expectedUser);
+        User expectedUser = new User(0l, "Hayleyascsacsa", "ascsacMark", "Jonascsaces", LocalDate.of(1985, 1, 11), Gender.FEMALE);
+        UserAuth expectedUserAuth = new UserAuth("asdf123436345435435346@yahoo.com", "password890", Role.USER, expectedUser);
 
         // Act
         UserAuth actual = repository.create(expectedUserAuth);
 
         // Assert
-        assertTrue(isUserAuthEqual(expectedUserAuth, actual));
+        assertEquals(expectedUserAuth, actual);
     }
 
     @Test
     public void givenUpdatePasswordWithUsername_whenUserAuthWithUsernameExist_thenUpdatePassword() {
         // Arrange
         String expected = "newpassword";
-        String username = "abc456";
+        String email = "abc456@yahoo.com";
 
         // Act
-        boolean isUpdated = repository.updatePassword(expected, username);
-        UserAuth userAuth = repository.findByUsername(username).orElseThrow();
+        boolean isUpdated = repository.updatePassword(expected, email);
+        UserAuth userAuth = repository.findByEmail(email).orElseThrow();
 
         // Assert
         assertTrue(isUpdated);
@@ -93,28 +91,13 @@ public class UserAuthRepositoryTest {
     public void givenUpdatePasswordWithUsername_whenUserAuthWithUsernameDoesNotExist_thenDoNotUpdatePassword() {
         // Arrange
         String expected = "newpassword";
-        String username = "abcascascsac";
+        String email = "abcascascsac@yahoo.com";
 
         // Act
-        boolean isUpdated = repository.updatePassword(expected, username);
+        boolean isUpdated = repository.updatePassword(expected, email);
 
         // Assert
         assertFalse(isUpdated);
-    }
-
-    private boolean isUserAuthEqual(UserAuth a, UserAuth b) {
-        return a.getUsername().equals(b.getUsername())
-            && a.getPassword().equals(b.getPassword())
-            && a.getRole() == b.getRole()
-            && isUserEqual(a.getUser(), b.getUser());
-    }
-
-    private boolean isUserEqual(User a, User b) {
-        return a.getFirstName().equals(b.getFirstName())
-            && a.getMiddleName().equals(b.getMiddleName())
-            && a.getLastName().equals(b.getLastName())
-            && a.getBirthDate().equals(b.getBirthDate())
-            && a.getGender() == b.getGender();
     }
 
 }

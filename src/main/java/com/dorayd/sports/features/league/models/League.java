@@ -12,7 +12,7 @@ import java.util.List;
 public class League {
 
     @EqualsAndHashCode.Exclude
-    private Long id;
+    private long id;
     private String title;
 
     private List<Team> teams;
