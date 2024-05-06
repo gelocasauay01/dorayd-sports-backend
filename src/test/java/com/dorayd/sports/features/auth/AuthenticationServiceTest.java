@@ -1,9 +1,5 @@
 package com.dorayd.sports.features.auth;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
@@ -14,12 +10,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.dorayd.sports.features.auth.models.AuthenticationResponse;
+import com.dorayd.sports.features.auth.responses.AuthenticationResponse;
 import com.dorayd.sports.features.auth.models.Role;
 import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.services.AuthenticationService;
 import com.dorayd.sports.features.user.models.Gender;
 import com.dorayd.sports.features.user.models.User;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -39,8 +37,8 @@ public class AuthenticationServiceTest {
         AuthenticationResponse response = service.register(userAuth);
 
         // Assert
-        assertTrue(isUserEqual(expectedUser, response.getUser()));
-        assertFalse(response.getToken().isBlank());
+        assertEquals(expectedUser, response.user());
+        assertFalse(response.token().isBlank());
     }
 
     @Test
@@ -63,8 +61,8 @@ public class AuthenticationServiceTest {
         AuthenticationResponse response = service.authenticate(expectedUserAuth);
 
         // Assert
-        assertTrue(isUserEqual(expectedUser, response.getUser()));
-        assertFalse(response.getToken().isBlank());
+        assertEquals(expectedUser, response.user());
+        assertFalse(response.token().isBlank());
     }
 
     @Test
@@ -74,14 +72,6 @@ public class AuthenticationServiceTest {
 
         // Act
         assertThrows(BadCredentialsException.class, () -> service.authenticate(expectedUserAuth));
-    }
-
-    private boolean isUserEqual(User a, User b) {
-        return a.getFirstName().equals(b.getFirstName())
-            && a.getMiddleName().equals(b.getMiddleName())
-            && a.getLastName().equals(b.getLastName())
-            && a.getBirthDate().equals(b.getBirthDate())
-            && a.getGender() == b.getGender();
     }
 
 }

@@ -33,14 +33,12 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
         try {
             final String FIND_BY_USERNAME_QUERY = "SELECT * FROM user_auth WHERE email = ?";
             UserAuth queriedUserAuth = jdbcTemplate.queryForObject(FIND_BY_USERNAME_QUERY,
-                (rs, rowNum) -> {
-                    return new UserAuth(
-                        rs.getString("email"), 
-                        rs.getString("password"), 
-                        Role.valueOf(rs.getString("role")), 
-                        User.builder().id(rs.getLong("user_id")).build()
-                    );
-                },
+                (rs, rowNum) -> new UserAuth(
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    Role.valueOf(rs.getString("role")),
+                    User.builder().id(rs.getLong("user_id")).build()
+                ),
                 email
             );
             queriedUserAuth.setUser(userRepository.findById(queriedUserAuth.getUser().getId()).orElseThrow());

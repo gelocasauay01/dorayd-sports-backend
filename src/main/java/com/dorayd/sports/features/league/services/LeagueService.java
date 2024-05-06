@@ -46,7 +46,7 @@ public interface LeagueService {
     /**
      * Adds a team to a league.
      *
-     * @param team The team ID to be added to the league.
+     * @param teamId The team ID to be added to the league.
      * @param leagueId The ID of the league.
      * @return The updated league.
      */

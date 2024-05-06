@@ -1,6 +1,6 @@
 package com.dorayd.sports.features.auth.services;
 
-import com.dorayd.sports.features.auth.models.AuthenticationResponse;
+import com.dorayd.sports.features.auth.responses.AuthenticationResponse;
 import com.dorayd.sports.features.auth.models.UserAuth;
 
 /**

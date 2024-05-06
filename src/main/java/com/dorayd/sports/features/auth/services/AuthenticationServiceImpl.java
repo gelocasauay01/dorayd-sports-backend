@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.dorayd.sports.features.auth.models.AuthenticationResponse;
+import com.dorayd.sports.features.auth.responses.AuthenticationResponse;
 import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
 
@@ -17,6 +17,7 @@ import com.dorayd.sports.features.auth.repositories.UserAuthRepository;
 @AllArgsConstructor
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
+
     private final UserAuthRepository userAuthRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;

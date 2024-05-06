@@ -27,13 +27,14 @@ public class UserAuthRepositoryTest {
     @Test
     public void givenFindByUsername_whenUserExist_thenReturnUserAuth() {
         // Arrange
-        User expectedUser = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expectedUser = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         UserAuth expectedUserAuth = new UserAuth("abc123@yahoo.com", "$2a$10$N35fUCHQ7/OwM4Dcw6LH8uwL8yFIJ/PnoxgAuVDJEUuNlXGANmu1G", Role.USER, expectedUser);
 
         // Act
         Optional<UserAuth> actual = repository.findByEmail("abc123@yahoo.com");
 
         // Assert
+        assertTrue(actual.isPresent());
         assertEquals(expectedUserAuth, actual.get());
     }
 
@@ -49,7 +50,7 @@ public class UserAuthRepositoryTest {
     @Test 
     public void givenCreate_whenUserAuthIsValidAndUserExist_thenReturnCreatedUserAuth() {
         // Arrange
-        User expectedUser = new User(4l, "Hayley", "Mark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
+        User expectedUser = new User(4L, "Hayley", "Mark", "Jones", LocalDate.of(1985, 1, 11), Gender.FEMALE);
         UserAuth expectedUserAuth = new UserAuth("asdf123436346@yahoo.com", "password890", Role.USER, expectedUser);
 
         // Act
@@ -62,7 +63,7 @@ public class UserAuthRepositoryTest {
     @Test 
     public void givenCreate_whenUserAuthIsValidAndUserDoesNotExist_thenReturnCreatedUserAuth() {
         // Arrange
-        User expectedUser = new User(0l, "Hayleyascsacsa", "ascsacMark", "Jonascsaces", LocalDate.of(1985, 1, 11), Gender.FEMALE);
+        User expectedUser = new User(0L, "Hayleyascsacsa", "ascsacMark", "Jonascsaces", LocalDate.of(1985, 1, 11), Gender.FEMALE);
         UserAuth expectedUserAuth = new UserAuth("asdf123436345435435346@yahoo.com", "password890", Role.USER, expectedUser);
 
         // Act

@@ -30,7 +30,7 @@ public class TeamRepositoryTest {
     @Test
     public void givenFindById_whenTeamExists_thenReturnSpecificTeam() {
         // Arrange
-        final long FIND_ID = 1l; 
+        final long FIND_ID = 1L;
         Team expected = new Team(FIND_ID, "Team Rocket", new ArrayList<>());
 
         // Act
@@ -44,7 +44,7 @@ public class TeamRepositoryTest {
     @Test
     public void givenFindById_whenTeamDoesNotExists_thenReturnEmpty() {
         // Arrange
-        final long INVALID_ID = 1000l;
+        final long INVALID_ID = 1000L;
 
         // Act
         Optional<Team> actual = repository.findById(INVALID_ID);
@@ -58,7 +58,7 @@ public class TeamRepositoryTest {
         // Arrange
         final String CREATE_NAME = "Digimon Gangsters";
         TeamDto input = new TeamDto(CREATE_NAME, new ArrayList<>());
-        Team expected = new Team(0l, CREATE_NAME, new ArrayList<>());
+        Team expected = new Team(0L, CREATE_NAME, new ArrayList<>());
 
         // Act
         Team actual = repository.create(input);
@@ -70,10 +70,10 @@ public class TeamRepositoryTest {
     @Test
     public void givenUpdate_whenTeamExists_thenUpdateTeamAndReturn() {
         // Arrange
-        final long UPDATE_ID = 2l;
+        final long UPDATE_ID = 2L;
         final String UPDATE_NAME = "Tekken Gang";
         TeamDto input = new TeamDto(UPDATE_NAME, new ArrayList<>());
-        Team expected = new Team(0l, UPDATE_NAME, new ArrayList<>());
+        Team expected = new Team(0L, UPDATE_NAME, new ArrayList<>());
 
         // Act
         Team actual = repository.update(UPDATE_ID, input);
@@ -85,7 +85,7 @@ public class TeamRepositoryTest {
     @Test
     public void givenDelete_whenTeamExists_thenDelete() {
         // Arrange
-        final long DELETE_ID = 4l;
+        final long DELETE_ID = 4L;
 
         // Act 
         boolean isDeleted = repository.delete(DELETE_ID);
@@ -99,8 +99,8 @@ public class TeamRepositoryTest {
     @Test
     public void givenAddPlayer_whenTeamAndUserExists_thenAddPlayerAndReturnTeam() {
         // Arrange
-        User expectedAddedPlayer = new User(1l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
-        Team expectedTeam = new Team(1l, "Team Rocket", List.of(expectedAddedPlayer));
+        User expectedAddedPlayer = new User(1L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        Team expectedTeam = new Team(1L, "Team Rocket", List.of(expectedAddedPlayer));
 
         // Act
         Team actual = repository.addPlayer(expectedAddedPlayer.getId(), expectedTeam.getId());
@@ -112,7 +112,7 @@ public class TeamRepositoryTest {
     @Test
     public void givenAddPlayer_whenUserDoesNotExist_thenThrowDataIntegrityViolationException() {
         // Arrange
-        User expectedAddedPlayer = new User(132423423423l, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
+        User expectedAddedPlayer = new User(132423423423L, "Joseph", "Mardo", "Casauay", LocalDate.of(1999, 8, 1), Gender.MALE);
         Team expectedTeam = new Team(1L, "Team Rocket", List.of(expectedAddedPlayer));
 
         // Act and Assert

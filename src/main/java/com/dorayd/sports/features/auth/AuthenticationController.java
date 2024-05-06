@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.auth;
 
+import com.dorayd.sports.features.auth.responses.AuthenticationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dorayd.sports.features.auth.models.AuthenticationResponse;
 import com.dorayd.sports.features.auth.models.UserAuth;
 import com.dorayd.sports.features.auth.services.AuthenticationService;
 
