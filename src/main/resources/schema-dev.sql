@@ -41,6 +41,14 @@ CREATE TABLE IF NOT EXISTS team_league_memberships (
     CONSTRAINT fk_league FOREIGN KEY(league_id) REFERENCES leagues(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS addresses (
+    id SERIAL PRIMARY KEY,
+    address_line_one TEXT NOT NULL,
+    address_line_two TEXT,
+    municipality VARCHAR(100) NOT NULL,
+    province VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS games (
     id SERIAL PRIMARY KEY,
     league_id INTEGER NOT NULL,
