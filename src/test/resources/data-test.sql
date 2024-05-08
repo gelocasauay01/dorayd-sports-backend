@@ -36,3 +36,12 @@ INSERT INTO games(league_id, team_a_id, team_b_id, schedule) VALUES(5, 5, 3, '19
 INSERT INTO addresses(address_line_one, address_line_two, municipality, province) VALUES('49 Dollar St. Greenpark Village', 'Brgy. San Isidro', 'Cainta', 'Rizal');
 INSERT INTO addresses(address_line_one, address_line_two, municipality, province) VALUES('45 Green St. Vista Verde Village', 'Brgy. San Isidro', 'Cainta', 'Rizal');
 INSERT INTO addresses(address_line_one, address_line_two, municipality, province) VALUES('9 America St. Konoha Village', 'Brgy. Mabitch', 'Jahong', 'Carl');
+
+INSERT INTO game_stats(user_id, game_id, points, assists, rebounds) VALUES(1, 1, 10, 2, 2);
+INSERT INTO game_stats(user_id, game_id, points, assists, rebounds) VALUES(1, 4, 10, 5, 2);
+INSERT INTO game_stats(user_id, game_id, points, assists, rebounds) VALUES(1, 3, 10, 6, 3);
+INSERT INTO game_stats(user_id, game_id, points, assists, rebounds) VALUES(1, 2, 13, 2, 2);
+INSERT INTO game_stats(user_id, game_id, points, assists, rebounds) VALUES(2, 2, 13, 2, 2);
+INSERT INTO game_stats(user_id, game_id, points, assists, rebounds) VALUES(2, 4, 13, 2, 2);
+
+

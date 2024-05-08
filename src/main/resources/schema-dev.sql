@@ -59,3 +59,18 @@ CREATE TABLE IF NOT EXISTS games (
     CONSTRAINT fk_team_a FOREIGN KEY(team_a_id) REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_team_b FOREIGN KEY(team_b_id) REFERENCES teams(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS game_stats(
+    user_id INTEGER NOT NULL,
+    game_id INTEGER NOT NULL,
+    points INTEGER DEFAULT 0,
+    assists INTEGER DEFAULT 0,
+    rebounds INTEGER DEFAULT 0,
+    steals INTEGER DEFAULT 0,
+    blocks INTEGER DEFAULT 0,
+    fouls INTEGER DEFAULT 0,
+    turnovers INTEGER DEFAULT 0,
+    PRIMARY KEY(user_id, game_id),
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_game FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE
+);
