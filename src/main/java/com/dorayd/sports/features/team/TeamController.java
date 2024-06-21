@@ -59,7 +59,7 @@ public class TeamController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Team> update(@PathVariable long id, @RequestBody TeamDto updatedTeam) {
+    public ResponseEntity<Team> update(@PathVariable long id, @Valid @RequestBody TeamDto updatedTeam) {
         return ResponseEntity
             .ok()
             .body(service.update(id, updatedTeam));

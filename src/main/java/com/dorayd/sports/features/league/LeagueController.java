@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.league;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class LeagueController {
     }
 
     @PostMapping
-    public ResponseEntity<League> create(@RequestBody LeagueDto newLeague) {
+    public ResponseEntity<League> create(@Valid @RequestBody LeagueDto newLeague) {
         final League createdLeague = service.create(newLeague);
         try {
             return ResponseEntity
@@ -57,7 +58,7 @@ public class LeagueController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<League> update(@PathVariable long id, @RequestBody LeagueDto updatedLeague) {
+    public ResponseEntity<League> update(@PathVariable long id, @Valid @RequestBody LeagueDto updatedLeague) {
         return ResponseEntity
             .ok()
             .body(service.update(id, updatedLeague));

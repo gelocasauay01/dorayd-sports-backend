@@ -81,6 +81,38 @@ public class LeagueControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
+    public void givenUpdate_whenLeagueNameIsBlank_thenReturnBadRequestStatus() throws Exception {
+        // Arrange
+        String input = "{\"id\": null,\"title\":\"\"}";
+
+        // Act
+        MvcResult result = mockMvc.perform(put("/api/league/{id}", UPDATE_ID)
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(input)).andReturn();
+
+        //Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("League name must have 3-100 characters"));
+    }
+
+    @Test
+    public void givenUpdate_whenLeagueNameIsNull_thenReturnBadRequestStatus() throws Exception {
+        // Arrange
+        String input = "{\"id\": null,\"title\":null}";
+
+        // Act
+        MvcResult result = mockMvc.perform(put("/api/league/{id}", UPDATE_ID)
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(input)).andReturn();
+
+        //Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("League name cannot be null"));
+    }
+
+    @Test
     public void givenDelete_whenLeagueWithIdExists_thenDeleteLeague() throws Exception {
         // Arrange
         final int DELETE_ID = 3;

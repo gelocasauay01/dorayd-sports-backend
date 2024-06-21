@@ -117,6 +117,40 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
+    public void givenUpdate_whenTeamNameIsNull_thenReturnBadRequestStatus() throws Exception {
+        // Arrange
+        final int UPDATE_ID = 2;
+        String requestBody = "{\"name\":null,\"userIds\":[]}";
+
+        //Act
+        MvcResult result = mockMvc.perform(put("/api/team/{id}", UPDATE_ID)
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).andReturn();
+
+        //Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Team name cannot be null"));
+    }
+
+    @Test
+    public void givenUpdate_whenTeamNameIsBlank_thenReturnBadRequestStatus() throws Exception {
+        // Arrange
+        final int UPDATE_ID = 2;
+        String requestBody = "{\"name\":\"\",\"userIds\":[]}";
+
+        //Act
+        MvcResult result = mockMvc.perform(put("/api/team/{id}", UPDATE_ID)
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).andReturn();
+
+        //Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Team name must have 3-100 characters"));
+    }
+
+    @Test
     public void givenDelete_whenTeamWithIdExists_thenDeleteTeam() throws Exception {
         // Arrange
         final int DELETE_ID = 3;
