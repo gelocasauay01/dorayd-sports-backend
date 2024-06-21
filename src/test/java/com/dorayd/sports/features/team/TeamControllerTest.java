@@ -66,6 +66,38 @@ public class TeamControllerTest extends IntegrationTestWithAuthentication{
     }
 
     @Test
+    public void givenCreate_whenTeamNameIsNull_thenReturnBadRequestStatus() throws Exception {
+        // Arrange
+        String requestBody = "{\"name\": null}";
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/api/team")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).andReturn();
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Team name cannot be null"));
+    }
+
+    @Test
+    public void givenCreate_whenTeamNameIsBlank_thenReturnBadRequestStatus() throws Exception {
+        // Arrange
+        String requestBody = "{\"name\": \"\"}";
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/api/team")
+                .with(user(userDetails))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).andReturn();
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        assertTrue(result.getResponse().getContentAsString().contains("Team name must have 3-100 characters"));
+    }
+
+    @Test
     public void givenUpdate_whenTeamAndIdExists_thenUpdateAndReturnUpdatedTeam() throws Exception {
         // Arrange
         final int UPDATE_ID = 2;

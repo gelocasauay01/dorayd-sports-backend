@@ -1,5 +1,6 @@
 package com.dorayd.sports.features.team;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +45,7 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<Team> create(@RequestBody TeamDto newTeam) {
+    public ResponseEntity<Team> create(@Valid @RequestBody TeamDto newTeam) {
         final Team createdTeam = service.create(newTeam);
         try {
             return ResponseEntity
